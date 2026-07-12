@@ -117,29 +117,33 @@ h1.page{font-family:var(--serif);font-weight:600;font-size:21px;margin-bottom:26
 .row .g{font-family:var(--mono);font-size:11px;color:var(--sub);letter-spacing:.06em}
 .row:hover .t{color:var(--blue);transform:translateX(3px)}
 
-/* ── 첫 화면: 들판 ─────────────────────── */
-.scene{width:100vw;margin-left:calc(50% - 50vw);display:flex;justify-content:center}
-.field{position:relative;flex:none;aspect-ratio:1583/971;
-  width:min(100vw,1500px,calc((100vh - 230px)*1.63))}
+/* ── 첫 화면: 들판이 화면을 가득 채운다 ── */
+.hero{position:relative;width:100vw;margin-left:calc(50% - 50vw);margin-top:-54px;
+  height:calc(100svh - 92px);min-height:430px;
+  background:#3d9ee4;overflow:hidden}
+.field{position:absolute;bottom:0;left:50%;transform:translateX(-50%);
+  aspect-ratio:1583/971;
+  width:max(100vw,calc((100svh - 96px)*1.6303))}
 .field>img.bg{position:absolute;inset:0;width:100%;height:100%;display:block;
   image-rendering:pixelated}
-.hs{position:absolute;display:block;background-repeat:no-repeat;
-  image-rendering:pixelated;cursor:pointer;transform-origin:50% 88%;
-  transition:transform .18s ease,filter .18s ease}
-.hs:hover,.hs:focus-visible{transform:scale(1.14);z-index:5;outline:none;
-  filter:drop-shadow(0 8px 12px rgba(20,20,25,.28)) brightness(1.04)}
+.hs{position:absolute;display:block;cursor:pointer;transform-origin:50% 92%;
+  transition:transform .18s ease}
+.hs .cut{position:absolute;inset:0;background-repeat:no-repeat;
+  image-rendering:pixelated;transition:filter .18s ease}
+.hs:hover,.hs:focus-visible{transform:scale(1.15);z-index:5;outline:none}
+.hs:hover .cut{filter:drop-shadow(0 7px 10px rgba(20,20,25,.32)) brightness(1.05)}
 .hs .tip{position:absolute;bottom:100%;left:50%;transform:translateX(-50%);
-  margin-bottom:8px;font-family:var(--mono);font-size:12px;font-weight:500;
+  margin-bottom:9px;font-family:var(--mono);font-size:12px;font-weight:500;
   letter-spacing:.06em;background:#fff;border:1.5px solid var(--ink);color:var(--ink);
   padding:3px 10px;white-space:nowrap;opacity:0;transition:opacity .15s ease;
   pointer-events:none;box-shadow:2px 2px 0 rgba(20,20,25,.9)}
 .hs:hover .tip{opacity:1}
-.hs.person .tip{margin-bottom:38px}
-.hs .lv{position:absolute;bottom:100%;left:50%;transform:translateX(-50%);
-  margin-bottom:10px;font-family:var(--mono);font-weight:700;
-  font-size:clamp(11px,1.4vw,15px);letter-spacing:.04em;white-space:nowrap;color:#fff;
+.hs.person .tip{margin-bottom:34px}
+.hs .lv{position:absolute;bottom:100%;left:var(--lvx,50%);transform:translateX(-50%);
+  margin-bottom:3px;font-family:var(--mono);font-weight:700;
+  font-size:clamp(11px,1.5vw,16px);letter-spacing:.04em;white-space:nowrap;color:#fff;
   text-shadow:-1px 0 0 #14141a,1px 0 0 #14141a,0 -1px 0 #14141a,0 1px 0 #14141a,0 2px 8px rgba(0,0,0,.45)}
-.pf-mini{display:flex;justify-content:center;align-items:center;gap:22px;margin-top:34px}
+.pf-mini{display:flex;justify-content:center;align-items:center;gap:22px;margin-top:26px}
 .pf-mini a{color:var(--ink);display:inline-flex;font-family:var(--serif);font-size:14px}
 .pf-mini a:hover{color:var(--blue)}
 .pf-mini svg{width:18px;height:18px}
@@ -224,8 +228,11 @@ form.gbf{max-width:640px;display:flex;flex-direction:column;gap:12px;margin-top:
   .row .d{grid-column:1}
   .row .g{grid-column:2;justify-self:end}
   .row .t{grid-column:1 / -1;font-size:16px}
-  .scene{overflow-x:auto;justify-content:flex-start;-webkit-overflow-scrolling:touch}
-  .field{height:min(62vh,520px);width:auto}
+  .hero{margin-top:-38px;height:calc(100svh - 148px);min-height:380px;
+    overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .hero::-webkit-scrollbar{display:none}
+  .field{position:relative;bottom:auto;left:auto;transform:none;
+    height:100%;width:auto}
   .w-title{font-size:21px}
   .stk{width:38px;height:38px}
   footer{padding:16px 20px 44px}
@@ -561,17 +568,20 @@ const SEC = {
 };
 
 /* ── 첫 화면의 들판: 그림 속 인물·토끼의 자리(그림에 대한 %)와 행선지 ── */
+const RABBIT_CLIP = "polygon(15% 0%, 27% 3%, 30% 24%, 45% 18%, 64% 22%, 82% 32%, 96% 48%, 100% 66%, 93% 82%, 97% 97%, 76% 100%, 50% 96%, 24% 100%, 7% 90%, 0% 68%, 3% 44%, 10% 28%, 11% 8%)";
+const PERSON_CLIP = "polygon(34% 0%, 60% 0%, 74% 5%, 81% 15%, 80% 30%, 72% 39%, 88% 46%, 100% 55%, 95% 64%, 80% 60%, 72% 55%, 75% 68%, 86% 82%, 80% 94%, 66% 88%, 55% 74%, 44% 80%, 38% 95%, 22% 100%, 14% 89%, 26% 76%, 30% 60%, 14% 64%, 0% 56%, 4% 45%, 18% 40%, 24% 30%, 26% 12%)";
+
 const SCENE = {
   img: "field.png",
   nameplate: "LV.28 김원호",
   youtube: "https://www.youtube.com/@awouldbepoetsvlog2240",
   spots: [
-    { key: "about",    label: "소개",    href: "#/about",    L: 42.5,  T: 35.5, W: 14.0, H: 32.0, person: true },
-    { key: "poem",     label: "시",      href: "#/poem",     L: 11.2,  T: 65.5, W: 8.0,  H: 12.0 },
-    { key: "prose",    label: "산문",    href: "#/prose",    L: 23.7,  T: 60.2, W: 8.0,  H: 12.5 },
-    { key: "research", label: "연구",    href: "#/research", L: 34.2,  T: 65.0, W: 8.0,  H: 13.5 },
-    { key: "guest",    label: "방문록",  href: "#/guest",    L: 55.0,  T: 61.5, W: 8.0,  H: 12.8 },
-    { key: "youtube",  label: "YouTube", href: "",           L: 64.7,  T: 56.5, W: 8.5,  H: 12.8 }
+    { key: "about",    label: "소개",    href: "#/about",    L: 43.9, T: 36.5, W: 11.4, H: 29.9, person: true, lvx: 55, clip: PERSON_CLIP },
+    { key: "poem",     label: "시",      href: "#/poem",     L: 12.3, T: 67.0, W: 5.4,  H: 8.8,  clip: RABBIT_CLIP },
+    { key: "prose",    label: "산문",    href: "#/prose",    L: 24.9, T: 61.7, W: 5.6,  H: 9.4,  clip: RABBIT_CLIP },
+    { key: "research", label: "연구",    href: "#/research", L: 35.4, T: 66.4, W: 5.6,  H: 10.8, clip: RABBIT_CLIP },
+    { key: "guest",    label: "방문록",  href: "#/guest",    L: 56.2, T: 63.0, W: 5.4,  H: 10.2, clip: RABBIT_CLIP },
+    { key: "youtube",  label: "YouTube", href: "",           L: 65.9, T: 58.2, W: 6.1,  H: 9.9,  clip: RABBIT_CLIP }
   ]
 };
 
@@ -607,19 +617,21 @@ function renderHome(){
     if(!href) return "";
     const Sx = 10000 / s.W, Sy = 10000 / s.H;
     const Px = 100 * s.L / (100 - s.W), Py = 100 * s.T / (100 - s.H);
-    const st = `left:${s.L}%;top:${s.T}%;width:${s.W}%;height:${s.H}%;`
-      + `background-image:url('${SCENE.img}');`
+    const box = `left:${s.L}%;top:${s.T}%;width:${s.W}%;height:${s.H}%`
+      + (s.lvx ? `;--lvx:${s.lvx}%` : "");
+    const cut = `background-image:url('${SCENE.img}');`
       + `background-size:${Sx.toFixed(2)}% ${Sy.toFixed(2)}%;`
-      + `background-position:${Px.toFixed(3)}% ${Py.toFixed(3)}%`;
+      + `background-position:${Px.toFixed(3)}% ${Py.toFixed(3)}%`
+      + (s.clip ? `;clip-path:${s.clip};-webkit-clip-path:${s.clip}` : "");
     const ext = s.key === "youtube";
     const badge = s.person ? `<span class="lv">${esc(SCENE.nameplate)}</span>` : "";
-    return `<a class="hs${s.person ? " person" : ""}" style="${st}" href="${esc(href)}"`
+    return `<a class="hs${s.person ? " person" : ""}" style="${box}" href="${esc(href)}"`
       + (ext ? ` target="_blank" rel="noopener"` : "")
-      + ` aria-label="${esc(s.label)}">${badge}<span class="tip">${esc(s.label)}</span></a>`;
+      + ` aria-label="${esc(s.label)}"><span class="cut" style="${cut}"></span>${badge}<span class="tip">${esc(s.label)}</span></a>`;
   }).join("");
   const links = PROFILE.links.map(l =>
     `<a href="${esc(l.url)}" target="_blank" rel="noopener" aria-label="${esc(l.label)}">${ICONS[l.icon] || esc(l.label)}</a>`).join("");
-  return `<div class="scene" id="scene">
+  return `<div class="hero" id="scene">
     <div class="field">
       <img class="bg" src="${esc(SCENE.img)}" alt="들판을 달리는 ${esc(SITE.author)}와 토끼들">
       ${spots}
