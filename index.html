@@ -122,8 +122,8 @@ h1.page{font-family:var(--serif);font-weight:600;font-size:21px;margin-bottom:26
   height:calc(100svh - 92px);min-height:430px;
   background:#3d9ee4;overflow:hidden}
 .field{position:absolute;bottom:0;left:50%;transform:translateX(-50%);
-  aspect-ratio:1583/971;
-  width:max(100vw,calc((100svh - 96px)*1.6303))}
+  aspect-ratio:2600/1462;
+  width:max(100vw,calc((100svh - 96px)*1.7784))}
 .field>img.bg{position:absolute;inset:0;width:100%;height:100%;display:block;
   image-rendering:pixelated}
 .hs{position:absolute;display:block;cursor:pointer;transform-origin:50% 92%;
@@ -411,6 +411,22 @@ h1.page,.w-title{font-weight:400;letter-spacing:-.025em}
 @media(max-width:760px){
   .pf-channel{width:148px;margin:48px 0 0 auto}
 }
+
+/* ── 픽셀 문패: 상단 활자와 들판의 팻말을 게임 글꼴로 ── */
+@font-face{
+  font-family:'DungGeunMo';
+  src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/DungGeunMo.woff') format('woff');
+  font-weight:normal;font-style:normal;font-display:swap;
+}
+.mark{font-family:'DungGeunMo',var(--mono);font-size:19px;font-weight:700;
+  letter-spacing:.05em;text-transform:uppercase}
+nav.top{font-family:'DungGeunMo',var(--mono);font-size:15px;font-weight:700;letter-spacing:.06em}
+.hs .lv{font-family:'DungGeunMo',var(--mono);font-size:clamp(14px,1.7vw,19px);letter-spacing:.05em}
+.hs .tip{font-family:'DungGeunMo',var(--mono);font-size:14px;font-weight:400;padding:4px 11px}
+@media(max-width:760px){
+  .mark{font-size:16px}
+  nav.top{font-size:13px}
+}
 </style>
 </head>
 <body>
@@ -569,19 +585,19 @@ const SEC = {
 
 /* ── 첫 화면의 들판: 그림 속 인물·토끼의 자리(그림에 대한 %)와 행선지 ── */
 const RABBIT_CLIP = "polygon(15% 0%, 27% 3%, 30% 24%, 45% 18%, 64% 22%, 82% 32%, 96% 48%, 100% 66%, 93% 82%, 97% 97%, 76% 100%, 50% 96%, 24% 100%, 7% 90%, 0% 68%, 3% 44%, 10% 28%, 11% 8%)";
-const PERSON_CLIP = "polygon(34% 0%, 60% 0%, 74% 5%, 81% 15%, 80% 30%, 72% 39%, 88% 46%, 100% 55%, 95% 64%, 80% 60%, 72% 55%, 75% 68%, 86% 82%, 80% 94%, 66% 88%, 55% 74%, 44% 80%, 38% 95%, 22% 100%, 14% 89%, 26% 76%, 30% 60%, 14% 64%, 0% 56%, 4% 45%, 18% 40%, 24% 30%, 26% 12%)";
+const PERSON_CLIP = "polygon(30% 0%, 55% 1%, 70% 5%, 80% 12%, 84% 24%, 80% 36%, 76% 42%, 92% 46%, 100% 53%, 96% 61%, 82% 58%, 76% 63%, 85% 71%, 87% 83%, 78% 91%, 65% 86%, 55% 77%, 48% 83%, 41% 97%, 24% 100%, 17% 92%, 25% 77%, 21% 63%, 8% 57%, 0% 51%, 4% 44%, 18% 41%, 14% 32%, 4% 27%, 1% 17%, 8% 7%, 18% 2%)";
 
 const SCENE = {
   img: "field.png",
   nameplate: "LV.28 김원호",
   youtube: "https://www.youtube.com/@awouldbepoetsvlog2240",
   spots: [
-    { key: "about",    label: "소개",    href: "#/about",    L: 43.9, T: 36.5, W: 11.4, H: 29.9, person: true, lvx: 55, clip: PERSON_CLIP },
-    { key: "poem",     label: "시",      href: "#/poem",     L: 12.3, T: 67.0, W: 5.4,  H: 8.8,  clip: RABBIT_CLIP },
-    { key: "prose",    label: "산문",    href: "#/prose",    L: 24.9, T: 61.7, W: 5.6,  H: 9.4,  clip: RABBIT_CLIP },
-    { key: "research", label: "연구",    href: "#/research", L: 35.4, T: 66.4, W: 5.6,  H: 10.8, clip: RABBIT_CLIP },
-    { key: "guest",    label: "방문록",  href: "#/guest",    L: 56.2, T: 63.0, W: 5.4,  H: 10.2, clip: RABBIT_CLIP },
-    { key: "youtube",  label: "YouTube", href: "",           L: 65.9, T: 58.2, W: 6.1,  H: 9.9,  clip: RABBIT_CLIP }
+    { key: "about",    label: "소개",    href: "#/about",    L: 57.4, T: 41.2, W: 12.1, H: 30.3, person: true, lvx: 48, clip: PERSON_CLIP },
+    { key: "poem",     label: "시",      href: "#/poem",     L: 15.4, T: 75.8, W: 5.5,  H: 9.0,  clip: RABBIT_CLIP },
+    { key: "prose",    label: "산문",    href: "#/prose",    L: 31.2, T: 70.2, W: 7.3,  H: 10.0, clip: RABBIT_CLIP },
+    { key: "research", label: "연구",    href: "#/research", L: 44.4, T: 74.2, W: 7.8,  H: 11.5, clip: RABBIT_CLIP },
+    { key: "guest",    label: "방문록",  href: "#/guest",    L: 70.4, T: 71.7, W: 7.6,  H: 10.8, clip: RABBIT_CLIP },
+    { key: "youtube",  label: "YouTube", href: "",           L: 82.6, T: 64.8, W: 7.9,  H: 10.8, clip: RABBIT_CLIP }
   ]
 };
 
