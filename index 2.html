@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KIM WONHO — POETRY</title>
+<meta name="description" content="김원호 — 시인 지망생. 시와 산문, 연구를 모아 두는 곳.">
+<meta property="og:title" content="KIM WONHO — POETRY">
+<meta property="og:description" content="김원호 — 시인 지망생. 시와 산문, 연구를 모아 두는 곳.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#002fa8">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect x='2' y='11' width='12' height='3' fill='%23002fa8'/%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Noto+Serif+KR:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f4f4f1;
+  --ink:#0a0a0c;
+  --blue:#123ea8;
+  --cyan:#25aebd;
+  --muted:#777a80;
+  --rule:rgba(10,10,12,.28);
+  --soft:rgba(10,10,12,.09);
+  --sans:Verdana,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+  --serif:'Noto Serif KR','Apple SD Gothic Neo',serif;
+  --mono:'IBM Plex Mono','SFMono-Regular',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--paper);-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{min-height:100svh;background:var(--paper);color:var(--ink);font:13px/1.7 var(--sans);overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+button,input,textarea{font:inherit}
+::selection{background:var(--blue);color:#fff}
+
+/* 푸른 먹이 걷히는 첫 장면 */
+#mist{position:fixed;inset:0;z-index:1000;overflow:hidden;pointer-events:none;background:var(--paper);animation:mist-out 2.8s cubic-bezier(.62,0,.2,1) forwards}
+#mist .veil{position:absolute;inset:-15%;background:
+  radial-gradient(ellipse at 26% 42%,rgba(18,62,168,.9) 0 8%,rgba(18,62,168,.45) 24%,transparent 54%),
+  radial-gradient(ellipse at 76% 58%,rgba(37,174,189,.6),transparent 48%),
+  linear-gradient(160deg,#e9edf7,#f4f4f1 55%);filter:blur(30px);animation:veil-drift 2.7s ease forwards}
+#mist .fog{position:absolute;border-radius:50%;filter:blur(70px);mix-blend-mode:multiply;opacity:.8}
+#mist .f1{width:78vmax;height:38vmax;left:-24vmax;top:-11vmax;background:rgba(18,62,168,.38);animation:fog-left 2.8s ease forwards}
+#mist .f2{width:64vmax;height:46vmax;right:-24vmax;bottom:-18vmax;background:rgba(37,174,189,.26);animation:fog-right 3s ease forwards}
+#mist .f3{display:none}
+#mist::after{content:'KIM WONHO  /  POETRY ARCHIVE';position:absolute;left:4vw;bottom:4vh;font:10px/1 var(--mono);letter-spacing:.18em;color:#fff;animation:intro-type 2.1s ease forwards}
+@keyframes mist-out{0%,66%{opacity:1}100%{opacity:0;visibility:hidden}}
+@keyframes veil-drift{to{transform:scale(1.14) translateY(-9%);filter:blur(55px);opacity:0}}
+@keyframes fog-left{to{transform:translate(-34vw,-18vh) scale(1.3);opacity:0}}
+@keyframes fog-right{to{transform:translate(30vw,22vh) scale(1.2);opacity:0}}
+@keyframes intro-type{0%{letter-spacing:.65em;opacity:0}45%{opacity:1}100%{letter-spacing:.18em;opacity:0}}
+
+/* 우측에 고정된 작은 차림표 */
+.site-head{position:fixed;inset:0 0 auto 0;z-index:40;pointer-events:none}
+.mark{position:absolute;left:18px;top:17px;pointer-events:auto;font:10px/1.35 var(--mono);letter-spacing:.12em;text-transform:uppercase}
+.mark span{display:block;color:var(--blue);font-size:9px;letter-spacing:.18em;margin-top:3px}
+nav.top{position:absolute;right:0;top:0;display:flex;flex-direction:column;align-items:flex-end;pointer-events:auto;border-right:1px solid var(--ink)}
+nav.top a{position:relative;display:block;min-width:78px;padding:5px 13px 5px 8px;text-align:right;font:10px/1.15 var(--sans);transition:color .15s,background .15s}
+nav.top a::before{content:attr(data-i);position:absolute;left:5px;top:6px;font:7px/1 var(--mono);color:var(--muted)}
+nav.top a:hover,nav.top a.on{background:var(--ink);color:var(--paper)}
+nav.top a.on::before{color:var(--cyan)}
+
+main{min-height:100svh}
+.site-foot{position:relative;margin:0 15.8vw;padding:18px 0 30px;border-top:1px solid var(--rule);display:flex;justify-content:space-between;gap:20px;font:9px/1.5 var(--mono);letter-spacing:.08em;color:var(--muted)}
+#hits{color:var(--blue)}
+
+/* 홈: 넓은 여백 안 작은 표식과 떠다니는 활자 */
+.home-stage{position:relative;min-height:100svh;overflow:hidden;background:var(--paper)}
+.home-identity{position:absolute;left:15.8vw;top:48%;display:flex;align-items:center;gap:16px;transform:translateY(-50%);z-index:4}
+.portrait-chip{position:relative;width:64px;height:64px;flex:none}
+.portrait-chip::before,.portrait-chip::after{content:'';position:absolute;inset:-6px;border:1px solid var(--blue);transform:rotate(-4deg);transition:transform .3s}
+.portrait-chip::after{inset:-11px;border-color:rgba(18,62,168,.26);transform:rotate(3deg)}
+.portrait-chip:hover::before,.portrait-chip:hover::after{transform:rotate(0)}
+.portrait-chip img{position:relative;z-index:1;width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.22);background:#ddd}
+.home-name{font:13px/1.35 var(--sans);font-weight:400;white-space:nowrap}
+.home-korean{margin-top:3px;font:10px/1.45 var(--serif);color:var(--muted);letter-spacing:.05em}
+.home-role{margin-top:9px;font:9px/1 var(--mono);letter-spacing:.12em;color:var(--blue)}
+.home-contact{position:absolute;left:15.8vw;bottom:8vh;display:flex;align-items:center;gap:16px;z-index:4;font:9px/1.4 var(--mono)}
+.home-contact a{border-bottom:1px solid transparent}
+.home-contact a:hover{color:var(--cyan);border-color:currentColor}
+.home-vlog{position:absolute;right:10.5vw;bottom:7vh;z-index:4;width:104px}
+.home-vlog span{display:block;font:8px/1.4 var(--mono);letter-spacing:.08em;color:var(--muted);margin-top:5px}
+.home-vlog img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;filter:grayscale(1) contrast(1.3);image-rendering:auto;border:1px solid var(--ink);transition:filter .2s,transform .2s}
+.home-vlog:hover img{filter:none;transform:translate(-3px,-3px);box-shadow:3px 3px 0 var(--blue)}
+.home-axis{position:absolute;left:15.8vw;right:7.8vw;top:16vh;border-top:1px solid var(--rule)}
+.home-axis::after{content:'000 / 2026';position:absolute;right:0;top:7px;font:8px/1 var(--mono);letter-spacing:.08em;color:var(--muted)}
+.float-glyph{--dx:0px;--dy:0px;position:absolute;z-index:2;color:var(--blue);font:12px/1 var(--mono);letter-spacing:.08em;transform:translate(var(--dx),var(--dy));transition:transform .35s cubic-bezier(.2,.8,.2,1);animation:drift 7s ease-in-out infinite;user-select:none;pointer-events:none}
+.float-glyph::before{content:'';display:block;width:9px;height:9px;background:currentColor;box-shadow:13px 0 0 currentColor,0 13px 0 currentColor;margin-bottom:10px}
+.float-glyph small{font-size:7px;color:var(--muted)}
+.g1{left:74%;top:21%;animation-delay:-1s}.g2{left:24%;top:25%;animation-delay:-3s;color:var(--cyan)}.g3{left:77%;top:64%;animation-delay:-5s}.g4{left:48%;top:76%;animation-delay:-2s;color:var(--cyan)}
+.g2::before{box-shadow:13px 0 0 currentColor,26px 0 0 currentColor,13px 13px 0 currentColor}
+.g3::before{width:6px;height:22px;box-shadow:11px -8px 0 currentColor,22px 5px 0 currentColor}
+.g4::before{border-radius:50%;box-shadow:13px 0 0 currentColor,26px 0 0 currentColor}
+@keyframes drift{0%,100%{margin-top:0}50%{margin-top:-11px}}
+
+/* 일반 페이지 */
+.page-shell{position:relative;min-height:100svh;padding:15vh 15.8vw 13vh}
+.page-shell::before{content:'';display:block;border-top:1px solid var(--rule);margin-bottom:8px}
+.page-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:44px}
+.page-title{font:13px/1.2 var(--sans);font-weight:400}
+.page-code{font:8px/1 var(--mono);letter-spacing:.14em;color:var(--muted)}
+.page-note{max-width:540px;font:14px/1.9 var(--serif);color:#35363a;margin:0 0 42px}
+.ghost{position:fixed;right:8vw;bottom:-.08em;z-index:-1;font:clamp(120px,30vw,390px)/.8 var(--serif);color:transparent;-webkit-text-stroke:1px rgba(18,62,168,.11);pointer-events:none;user-select:none}
+
+/* 작품: 제목 목록 + 반응형 활자 미리보기 */
+.work-layout{display:grid;grid-template-columns:minmax(260px,.62fr) minmax(280px,1fr);gap:clamp(48px,10vw,150px);min-height:55vh}
+.work-list{align-self:start}
+.work-line{display:grid;grid-template-columns:40px 1fr;gap:10px;padding:4px 0;font:13px/1.55 var(--sans)}
+.work-line .num{font:8px/2.4 var(--mono);color:var(--muted)}
+.work-line .title{transition:color .15s,transform .15s}
+.work-line:hover .title,.work-line:focus .title,.work-line.active .title{color:var(--cyan);transform:translateX(4px)}
+.work-empty{font:12px/1.8 var(--sans);color:var(--muted)}
+.work-preview{align-self:center;position:sticky;top:18vh;min-height:240px;display:flex;align-items:center;gap:20px}
+.preview-mark{flex:none;width:132px;aspect-ratio:1;background:var(--ink);color:#fff;display:grid;place-items:center;font:42px/1 var(--serif);position:relative;overflow:hidden}
+.preview-mark::after{content:'';position:absolute;inset:14px;border:1px solid rgba(255,255,255,.35);transform:rotate(45deg)}
+.preview-copy{max-width:280px}
+.preview-title{font:16px/1.6 var(--serif);margin-bottom:8px}
+.preview-excerpt{font:11px/1.8 var(--serif);color:var(--muted)}
+.preview-meta{margin-top:12px;font:8px/1.4 var(--mono);letter-spacing:.08em;color:var(--cyan)}
+
+/* 작품 본문 */
+.reader-shell{min-height:100svh;padding:14vh 15.8vw 16vh}
+.reader{max-width:680px}
+.crumb{margin-bottom:48px;font:9px/1 var(--mono);letter-spacing:.14em;color:var(--cyan)}
+.w-title{font:400 clamp(24px,3vw,38px)/1.45 var(--serif);letter-spacing:-.035em;margin-bottom:10px}
+.w-meta{font:9px/1.5 var(--mono);color:var(--muted);margin-bottom:58px}
+.w-body.poem{white-space:pre-wrap;font:16px/2.2 var(--serif)}
+.w-body.prose p{font:16px/2.05 var(--serif);margin-bottom:1.55em}
+.wlink{display:inline-block;margin-top:30px;font:9px/1 var(--mono);color:var(--cyan);border-bottom:1px solid currentColor}
+.w-note{margin-top:48px;padding-top:12px;border-top:1px solid var(--soft);font:11px/1.8 var(--sans);color:var(--muted)}
+.pn{display:grid;grid-template-columns:1fr auto 1fr;gap:16px;margin-top:82px;padding-top:10px;border-top:1px solid var(--rule);font:9px/1.7 var(--mono);color:var(--muted)}
+.pn span:last-child{text-align:right}.pn .mid{color:var(--cyan)}
+
+/* 소개: 목록의 스티커가 우측에서 크게 응답 */
+.about-layout{display:grid;grid-template-columns:minmax(360px,1fr) minmax(220px,.65fr);gap:clamp(55px,10vw,145px)}
+.about-main{min-width:0}
+.facts{border-top:1px solid var(--rule);margin-bottom:64px}
+.fact{display:grid;grid-template-columns:72px 1fr;gap:18px;padding:10px 0;border-bottom:1px solid var(--soft)}
+.fact .fk{font:8px/2 var(--mono);color:var(--muted);letter-spacing:.08em}
+.fact .fv{font:13px/1.8 var(--serif)}
+.grp{margin-top:42px}.grp:first-of-type{margin-top:0}
+.k{display:block;margin-bottom:9px;font:9px/1 var(--mono);letter-spacing:.14em;color:var(--blue)}
+.grp-list{border-top:1px solid var(--rule)}
+.grp-it{display:grid;grid-template-columns:28px minmax(0,1fr) auto;gap:8px;align-items:center;padding:6px 0;border-bottom:1px solid var(--soft);font:12px/1.6 var(--serif)}
+.grp-it::before{content:attr(data-no);font:7px/1 var(--mono);color:var(--muted)}
+.grp-it .tx{transition:color .15s,transform .15s}
+.grp-it:hover .tx,.grp-it:focus .tx{color:var(--cyan);transform:translateX(4px)}
+.tail{display:flex;align-items:center;gap:7px}.arr{font:8px/1 var(--mono);color:var(--muted)}
+.stk{width:29px;height:29px;object-fit:cover;filter:grayscale(1) contrast(1.15);border:1px solid var(--ink);transition:filter .15s,transform .15s;background:#fff}
+.grp-it:hover .stk{filter:none;transform:rotate(-4deg) scale(1.08)}
+.sticker-preview{position:sticky;top:17vh;align-self:start;min-height:360px;padding-top:34px;border-top:1px solid var(--rule)}
+.sticker-stage{position:relative;width:min(100%,300px);aspect-ratio:1;background:#e9e9e5;display:grid;place-items:center;overflow:hidden}
+.sticker-stage::before{content:'';position:absolute;inset:13px;border:1px solid rgba(10,10,12,.34);z-index:2;pointer-events:none}
+.sticker-stage img{width:100%;height:100%;object-fit:cover;filter:grayscale(.25) contrast(1.08);transition:opacity .18s,transform .25s}
+.sticker-stage.empty::after{content:'IMAGE / ARCHIVE';font:8px/1 var(--mono);letter-spacing:.12em;color:var(--muted)}
+.sticker-label{margin-top:13px;max-width:300px;font:10px/1.7 var(--sans)}
+.sticker-source{display:block;margin-top:5px;font:7px/1.4 var(--mono);letter-spacing:.12em;color:var(--cyan)}
+
+/* 방문록 */
+.guest-layout{max-width:680px}
+.gb-list{border-top:1px solid var(--rule);margin:0 0 56px}
+.gb{padding:15px 0;border-bottom:1px solid var(--soft)}
+.gb .who{font:8px/1.4 var(--mono);color:var(--muted);margin-bottom:8px}
+.gb .msg{font:14px/1.95 var(--serif);white-space:pre-wrap}
+.gbf{display:flex;flex-direction:column;gap:9px}
+.gbf input,.gbf textarea{width:100%;padding:11px 12px;border:1px solid var(--rule);border-radius:0;background:transparent;color:var(--ink);outline:none;font:12px/1.7 var(--sans)}
+.gbf input:focus,.gbf textarea:focus{border-color:var(--blue)}
+.gbf textarea{min-height:140px;resize:vertical}
+.gbf button{align-self:flex-start;padding:8px 18px;border:1px solid var(--ink);background:var(--ink);color:var(--paper);cursor:pointer;font:9px/1 var(--mono)}
+.gbf button:hover{background:var(--blue);border-color:var(--blue)}
+#gb-status,.hint{font:9px/1.7 var(--sans);color:var(--muted)}
+
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;animation:none!important;transition:none!important}#mist{display:none}}
+@media(max-width:760px){
+  .site-head{position:sticky;top:0;height:auto;background:rgba(244,244,241,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--rule)}
+  .mark{position:relative;left:auto;top:auto;display:block;padding:10px 16px 6px;font-size:9px}.mark span{display:inline;margin-left:6px;font-size:8px}
+  nav.top{position:relative;right:auto;top:auto;flex-direction:row;justify-content:space-between;border-right:0;border-top:1px solid var(--soft);overflow-x:auto}
+  nav.top a{min-width:auto;flex:1;text-align:center;padding:9px 5px 10px;font-size:10px;white-space:nowrap}
+  nav.top a::before{display:none}
+  main{min-height:calc(100svh - 72px)}
+  .home-stage{min-height:calc(100svh - 72px)}
+  .home-axis{left:20px;right:20px;top:12vh}
+  .home-identity{left:24px;top:48%;gap:14px}.portrait-chip{width:58px;height:58px}.home-name{font-size:12px}
+  .home-contact{left:24px;bottom:9vh;display:grid;grid-template-columns:auto auto;gap:9px 14px}
+  .home-contact .mail{grid-column:1/-1}
+  .home-vlog{right:22px;bottom:8vh;width:82px}
+  .g1{left:72%;top:23%}.g2{left:13%;top:28%}.g3{left:74%;top:57%}.g4{display:none}
+  .page-shell,.reader-shell{padding:11vh 20px 13vh}
+  .page-shell::before{margin-bottom:7px}.page-head{margin-bottom:36px}
+  .ghost{right:-2vw;bottom:5vh;font-size:52vw}
+  .work-layout{display:block;min-height:60vh}.work-preview{display:none}.work-line{padding:8px 0;font-size:14px}
+  .reader{max-width:none}.w-title{font-size:25px}.w-body.poem,.w-body.prose p{font-size:15px}
+  .about-layout{display:block}.about-main{width:100%}.sticker-preview{display:none}
+  .fact{grid-template-columns:60px 1fr}.fact .fv{font-size:14px}
+  .grp-it{grid-template-columns:24px minmax(0,1fr) auto;font-size:13px;padding:8px 0}.stk{width:40px;height:40px}
+  .site-foot{margin:0 20px;padding-bottom:24px}
+}
+
+/* ── PIXEL RABBIT EDITION ───────────────────────────── */
+.ghost,.float-glyph{display:none!important}
+.site-head{position:fixed;left:0;right:0;top:0;height:54px;background:rgba(244,244,241,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--soft);z-index:50}
+.mark{left:17px;top:15px;font-size:9px;line-height:1.25}
+.mark span{font-size:7px;margin-top:2px}
+nav.top{right:15px;top:5px;display:flex;flex-direction:row;align-items:center;gap:3px;border:0}
+nav.top a{display:grid;place-items:center;width:43px;height:43px;min-width:0;padding:0;border:1px solid transparent;background:transparent;color:var(--ink)}
+nav.top a::before{display:none}
+nav.top a:hover,nav.top a.on{background:transparent;color:var(--blue);border-color:var(--blue)}
+nav.top a.on{box-shadow:2px 2px 0 var(--cyan)}
+.rabbit-nav{display:block;width:28px;height:28px}
+.rabbit-nav svg{display:block;width:100%;height:100%;image-rendering:pixelated;shape-rendering:crispEdges}
+.home-stage{min-height:100svh;padding-top:54px}
+.home-axis{top:15vh}
+.poem-seal{position:absolute;left:72.5%;top:19%;z-index:5;font:10px/1 var(--serif);color:var(--ink);border-bottom:1px solid var(--blue);padding-bottom:3px;letter-spacing:.06em}
+.pixel-rabbit{--dx:0px;--dy:0px;position:absolute;z-index:3;width:56px;height:56px;color:var(--blue);transform:translate(var(--dx),var(--dy));transition:transform .32s cubic-bezier(.2,.8,.2,1);animation:rabbit-hop 7s steps(2,end) infinite;pointer-events:none;filter:drop-shadow(3px 3px 0 rgba(10,10,12,.09))}
+.pixel-rabbit svg{display:block;width:100%;height:100%;overflow:visible;image-rendering:pixelated;shape-rendering:crispEdges}
+.rb1{left:72%;top:23%;width:68px;height:68px;animation-delay:-1s}
+.rb2{left:25%;top:23%;width:48px;height:48px;color:var(--cyan);animation-delay:-3.4s}
+.rb3{left:76%;top:57%;width:76px;height:76px;color:var(--ink);animation-delay:-5.2s}
+.rb4{left:49%;top:72%;width:54px;height:54px;color:var(--cyan);animation-delay:-2.2s}
+.rb5{left:42%;top:19%;width:42px;height:42px;color:var(--blue);animation-delay:-6s}
+@keyframes rabbit-hop{0%,100%{margin-top:0}48%{margin-top:-7px}52%{margin-top:-7px}}
+.home-vlog{right:16px!important;bottom:16px!important;width:88px!important}
+.home-vlog img{aspect-ratio:1/1!important;object-fit:cover!important}
+.home-vlog span{font-size:7px;line-height:1.35;margin-top:4px;text-align:right}
+.page-shell,.reader-shell{padding-top:14vh}
+.page-head::before{content:'';display:inline-block;width:18px;height:18px;background:var(--blue);clip-path:polygon(25% 0,43% 0,43% 22%,57% 22%,57% 0,75% 0,75% 22%,88% 22%,88% 75%,75% 75%,75% 90%,25% 90%,25% 75%,12% 75%,12% 22%,25% 22%);margin-right:10px;vertical-align:-3px}
+.page-title{margin-right:auto}.page-head{justify-content:flex-start;gap:0}.page-code{margin-left:auto}
+@media(max-width:760px){
+  .site-head{position:sticky;height:51px;display:block;overflow:hidden}
+  .mark{position:absolute;left:10px;top:17px;padding:0;font-size:8px}.mark span{display:none}
+  nav.top{position:absolute;right:7px;top:5px;display:flex;border:0;gap:1px;width:auto}
+  nav.top a{flex:none;width:37px;height:40px;padding:0}
+  .rabbit-nav{width:25px;height:25px}
+  main{min-height:calc(100svh - 51px)}
+  .home-stage{min-height:calc(100svh - 51px);padding-top:0}
+  .home-axis{top:12vh}
+  .poem-seal{left:auto;right:21%;top:17%;font-size:9px}
+  .rb1{left:70%;top:21%;width:55px;height:55px}.rb2{left:13%;top:26%;width:43px;height:43px}.rb3{left:72%;top:54%;width:61px;height:61px}.rb4{left:47%;top:69%;width:45px;height:45px}.rb5{left:43%;top:17%;width:35px;height:35px}
+  .home-vlog{right:8px!important;bottom:8px!important;width:76px!important}
+  .home-vlog span{display:none}
+  .page-shell,.reader-shell{padding-top:10vh}
+}
+
+</style>
+</head>
+<body>
+
+<div id="mist" aria-hidden="true">
+  <div class="veil"></div><div class="fog f1"></div><div class="fog f2"></div><div class="fog f3"></div>
+</div>
+
+<header class="site-head">
+  <a class="mark" href="#/">KIM WONHO <span>POETRY ARCHIVE</span></a>
+  <nav class="top" aria-label="주요 메뉴">
+    <a href="#/poem" data-n="poem" aria-label="시" title="시"><span class="rabbit-nav" data-rabbit="0" aria-hidden="true"></span></a>
+    <a href="#/prose" data-n="prose" aria-label="산문" title="산문"><span class="rabbit-nav" data-rabbit="1" aria-hidden="true"></span></a>
+    <a href="#/research" data-n="research" aria-label="연구" title="연구"><span class="rabbit-nav" data-rabbit="2" aria-hidden="true"></span></a>
+    <a href="#/about" data-n="about" aria-label="소개" title="소개"><span class="rabbit-nav" data-rabbit="3" aria-hidden="true"></span></a>
+    <a href="#/guest" data-n="guest" aria-label="방문록" title="방문록"><span class="rabbit-nav" data-rabbit="4" aria-hidden="true"></span></a>
+  </nav>
+</header>
+
+<main id="app"><noscript><p>이 페이지를 보려면 자바스크립트를 켜 주세요.</p></noscript></main>
+
+<footer class="site-foot">
+  <span>© 2026 KIM WONHO</span><span id="hits" aria-hidden="true"></span>
+</footer>
+
+<script>
+/* =========================================================
+   ✎ 여기서부터가 '내용'입니다.
+   ---------------------------------------------------------
+   · 글과 소개는 별채 '편집실' 파일에서 고치는 것이 가장 쉽습니다.
+   · 손으로 고칠 때: 아래 '새 글 틀'을 복사해서 WORKS 대괄호
+     안 맨 위에 붙여 넣습니다. 위에 둘수록 최신.
+   · section 값  : "poem"(시) "prose"(산문·비평) "research"(연구)
+   · 본문(body)  : 백틱(`) 두 개 사이에 씁니다. 행갈이와 빈 줄이
+     화면에 그대로 반영됩니다. 본문 안에는 백틱 기호만 쓰지 마세요.
+   · 아래 "WORKS 끝" "ABOUT 끝" 표식은 편집실의 이정표이니
+     지우지 마세요.
+   ========================================================= */
+
+const SITE = {
+  title: "KIM WONHO — POETRY",
+  author: "김원호",
+  email: "ssonss81@naver.com",
+  guestbookEndpoint: "",  /* 방문록 전송 주소(안내문 참고). 비워 두면 메일로 작동합니다. */
+  goatcounter: ""         /* 방문자 수 표시용 GoatCounter 코드(안내문 참고). 비워 두면 숫자가 표시되지 않습니다. */
+};
+
+/* ── 첫 화면 ── */
+const PROFILE = {
+  photo: "profile.jpg",
+  names: ["김원호", "金元晧", "Kim wonho"],
+  roles: ["시인 지망생"],
+  email: "ssonss81@naver.com",
+  links: [
+    { label: "instagram", url: "https://www.instagram.com/ki_mo_no_/", icon: "instagram" },
+    { label: "blog", url: "https://blog.naver.com/ssonss81", icon: "blog" }
+  ],
+  youtube: {
+    url: "https://www.youtube.com/@awouldbepoetsvlog2240",
+    thumbnail: "https://i.ytimg.com/vi/RPm1LhaeleM/hqdefault.jpg",
+    title: "시인 지망생 브이로그"
+  }
+};
+
+/* ── 새 글 틀 (복사해서 쓰세요) ───────────────────────────
+{
+  id: "p-100",            // 글마다 다른 이름. 겹치면 안 됩니다.
+  section: "poem",        // poem | prose | research
+  title: "제목",
+  date: "2026-07-08",     // 연-월-일
+  meta: "",               // 발표 지면 등. 없으면 빈 따옴표.
+  link: "",               // 원문 주소(연구 글용). 없으면 빈 따옴표.
+  note: "",               // 본문 끝에 작게 붙는 말. 없으면 빈 따옴표.
+  body: `첫 행
+둘째 행
+
+빈 줄은 연 나눔이 됩니다`
+},
+──────────────────────────────────────────────────────── */
+
+const WORKS = [
+
+
+
+]; /* WORKS 끝 */
+
+/* ── 소개 ──
+   img: 항목 옆의 작은 스티커 이미지 주소. 비워 두면 스티커 없이 표시됩니다. */
+const ABOUT = {
+  facts: [
+    { k: "이름", v: "김원호" },
+    { k: "소개", v: "1997년 경상남도 창원에서 태어나 진주에서 자랐다" },
+    { k: "근황", v: "동국대학교 국어국문학과(현대문학 전공) 석사 과정에 재학 중이다" }
+  ],
+  groups: [
+    { h: "발표", items: [
+      { t: "《다층》 2025 봄", url: "https://www.aladin.co.kr/shop/wproduct.aspx?start=short&ItemId=361701647", img: "https://image.aladin.co.kr/product/36170/16/cover500/k152038193_1.jpg" },
+      { t: "《시와 산문》 2025 봄", url: "https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=K702037247&start=pnaver_02", img: "https://image.aladin.co.kr/product/36080/9/cover500/k702037247_1.jpg" },
+      { t: "《현대시학》 2025 1-2월", url: "https://www.aladin.co.kr/shop/wproduct.aspx?start=short&ItemId=355693083", img: "https://image.aladin.co.kr/product/35569/30/cover500/k182036472_1.jpg" },
+      { t: "《모닥》", url: "http://www.tadak.co/5228551089", img: "https://www.tadak.co/uploads/1/5/1/6/151642594/published/modak.png" },
+      { t: "《살림문학》", url: "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=356528172", img: "https://image.aladin.co.kr/product/35652/81/cover500/k942036811_1.jpg" },
+      { t: "《자음과모음》 2024 겨울", url: "https://www.aladin.co.kr/shop/wproduct.aspx?start=short&ItemId=353241213", img: "https://image.aladin.co.kr/product/35324/12/cover500/k002035478_1.jpg" },
+      { t: "《P.S 시와 징후》 2023 겨울", url: "https://www.aladin.co.kr/shop/wproduct.aspx?start=short&itemid=330083707", img: "https://image.aladin.co.kr/product/33008/37/cover500/k992937979_1.jpg" },
+      { t: "《황해문화》 2023 겨울", url: "https://www.aladin.co.kr/shop/wproduct.aspx?start=short&itemid=329519405", img: "https://image.aladin.co.kr/product/32951/94/cover500/k422936143_1.jpg" },
+      { t: "《파란》 2023 가을", url: "https://www.aladin.co.kr/shop/wproduct.aspx?start=short&itemid=325736666", img: "https://image.aladin.co.kr/product/32573/66/cover500/k912935141_1.jpg" },
+      { t: "《시산맥》 2023 여름", url: "https://www.aladin.co.kr/shop/wproduct.aspx?start=short&ItemId=317060561", img: "https://image.aladin.co.kr/product/31706/5/cover500/k252833799_1.jpg" },
+      { t: "《공정한시인의사회》 2023 4월", url: "https://gongsisa.com/board_wdNc92/13840", img: "" },
+      { t: "《가글》 2호", url: "https://tumblbug.com/rhdvh/story", img: "https://img.tumblbug.com/eyJidWNrZXQiOiJ0dW1ibGJ1Zy1pbWctcHJvZCIsImtleSI6ImNvdmVyLzcxYmFlOGUwLWFjY2MtNDVlNS1hOTZlLTJmYjUzZmI4OTYzMC81MTU0Y2IzMC00NmYwLTRmYTItYjliNS1mYzU0ZmI5NWUzNTIucG5nIiwiZWRpdHMiOnsicmVzaXplIjp7IndpZHRoIjoxMDAwLCJoZWlnaHQiOjEwMDAsIndpdGhvdXRFbmxhcmdlbWVudCI6dHJ1ZSwiZml0IjpudWxsfSwicm91bmRDcm9wIjpmYWxzZSwicm90YXRlIjpudWxsfX0=" },
+      { t: "《무트로》 VOL.3", url: "https://tumblbug.com/mutro3", img: "https://img.tumblbug.com/eyJidWNrZXQiOiJ0dW1ibGJ1Zy1pbWctcHJvZCIsImtleSI6ImNvdmVyLzYwYWQ0YTQ5LTc2MGEtNDY4YS1iNDgzLTY4MWY0NzE3Y2Q2NS9lMWJjNzA1ZC1jOTNlLTRkOWItYWRkNy02ZDRjNjg1YmYwMWEuanBlZyIsImVkaXRzIjp7InJlc2l6ZSI6eyJ3aWR0aCI6MTAwMCwiaGVpZ2h0IjoxMDAwLCJ3aXRob3V0RW5sYXJnZW1lbnQiOnRydWUsImZpdCI6bnVsbH0sInJvdW5kQ3JvcCI6ZmFsc2UsInJvdGF0ZSI6bnVsbH19" },
+      { t: "《주머니시》 5th", url: "https://product.kyobobook.co.kr/detail/S000203156852", img: "https://contents.kyobobook.co.kr/sih/fit-in/458x0/pdt/S000203156852.jpg" },
+      { t: "《같이 가는 기분》 2022 봄", url: "https://m.blog.naver.com/webzineseein/222645750182", img: "" },
+      { t: "《웹진 포엣푸념》 푸념 인터뷰", url: "https://www.instagram.com/p/DJRWwGUpN8I/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA%3D%3D", img: "https://img1.daumcdn.net/thumb/C120x120/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2F7nhMn%2FbtsQhB3B3UT%2Ffz91HwDes7Jd9P7K6PK6pK%2Fimg.png" }
+    ] },
+    { h: "수상", items: [
+      { t: "《동대문학상》", url: "https://www.donggukmedia.com/bbs/list.html?table=bbs_15&sc_category=1&sc_area=&sc_word=", img: "https://img1.daumcdn.net/thumb/C120x120/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FbQOb9G%2FdJMcafE1BZN%2FLNVbHq6bniW4FbMdUo9vk1%2Fimg.png" },
+      { t: "《윤동주시문학상》", url: "https://yoondongju.yonsei.ac.kr/yoondongju_m/notice/ydj_6_1.do?mode=view&articleNo=218372#/list", img: "https://yoondongju.yonsei.ac.kr/_res/yoondongju_m/img/common/logo_footer.jpg" },
+      { t: "《가람이병기청년시문학상》", url: "https://www.jbpresscenter.com/news/articleView.html?idxno=504929", img: "https://cdn.jbpresscenter.com/news/photo/202410/504929_305994_4044.jpg" },
+      { t: "《펄벅기념문학상》", url: "https://www.bcmuseum.or.kr/ko/boards/notice/572", img: "https://www.bcmuseum.or.kr/comm/file/image?id=2949" },
+      { t: "《의혈창작문학상》", url: "https://news.cauon.net/news/articleView.html?idxno=40158", img: "https://cdn.news.cauon.net/news/photo/202312/40158_30164_5549.jpg" },
+      { t: "《기아 인스파이어링 문학상》", url: "https://blog.naver.com/socs25/223176743595", img: "" },
+      { t: "《계명문학상》", url: "http://www.gokmu.com/mobile/bbs.html?mode=view&bbs_code=comm14&cate=&page=&search=&keyword=&type=&bbs_no=228133", img: "" },
+      { t: "《경남청년문학상》", url: "https://gnbook.tistory.com/entry/제1회-경남청년문학상-수상-작품집젊은-바다를-초대하다", img: "https://img1.daumcdn.net/thumb/C120x120/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2Fqpnxt%2FbtrLFIgksoT%2FAAAAAAAAAAAAAAAAAAAAAHsr-D4R0VdPMMytSBvvO7dbFNVIu5l0LyiAf2OtU4NY%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1785509999%26allow_ip%3D%26allow_referer%3D%26signature%3Ds8vgfekZe%252Bte1EbHv1rYlPJQ5OY%253D" },
+      { t: "《전주동네책방문학상》", url: "https://tumblbug.com/jeonjubookstore2?ref=프로필%2F올린프로젝트", img: "https://img.tumblbug.com/eyJidWNrZXQiOiJ0dW1ibGJ1Zy1pbWctcHJvZCIsImtleSI6ImNvdmVyLzUyNWYzMWNiLWZmYzQtNGE1Yy04NmNmLTVjN2Y5NTI2YzJiNS85YzI1ZjQ4MS0yNzgzLTQwNDYtYThjYy05ZDczY2IwZjEyNDguanBlZyIsImVkaXRzIjp7InJlc2l6ZSI6eyJ3aWR0aCI6MTAwMCwiaGVpZ2h0IjoxMDAwLCJ3aXRob3V0RW5sYXJnZW1lbnQiOnRydWUsImZpdCI6bnVsbH0sInJvdW5kQ3JvcCI6ZmFsc2UsInJvdGF0ZSI6bnVsbH19" },
+      { t: "《의정부전국문학공모전》", url: "https://m.cafe.daum.net/21munin/LZ6j/137?", img: "" }
+    ] },
+    { h: "기타", items: [
+      { t: "《연희문학창작촌 입주작가》 2026년 3분기(7~9월) 선정", url: "https://kimwonho.tistory.com/38", img: "https://img1.daumcdn.net/thumb/C120x120/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FdrmV14%2FdJMcahXilfS%2FbXJ0e4RnM8ygigy1hT8JGK%2Fimg.png" },
+      { t: "《토지문화재단 문인 창작실 입주작가》", url: "https://kimwonho.tistory.com/28", img: "https://img1.daumcdn.net/thumb/C120x120/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FENqoB%2FbtsOCB4ESip%2FAAAAAAAAAAAAAAAAAAAAAAL_61NleF8CrfezUJSxOShHsq1hx9fKSnJNMsOW9tTh%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1785509999%26allow_ip%3D%26allow_referer%3D%26signature%3DufZe1aOZvxAiFH3N3r8bh3FBZ8k%253D" },
+      { t: "《완산도서관 자작사색(전문작가 집필실) 입주작가》", url: "https://kimwonho.tistory.com/32", img: "https://img1.daumcdn.net/thumb/C120x120/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FbR5MgY%2FbtsOEW8c0Ti%2FAAAAAAAAAAAAAAAAAAAAAALUOBbQ6iSvRq64yPiC_3bjcHowby2cJniVu4nD1sAc%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1785509999%26allow_ip%3D%26allow_referer%3D%26signature%3DoR8qg1U9x658gCvojQ8Ok81JuUs%253D" },
+      { t: "《한국예술인복지재단 예술인 예술활동증명》", url: "https://kimwonho.tistory.com/35", img: "https://img1.daumcdn.net/thumb/C120x120/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FctI4Os%2FbtsQhmlkJjx%2FOqqE8khqwQVRek7mB783wk%2Fimg.jpg" },
+      { t: "《한국예술인복지재단 신진예술인 예술활동증명》", url: "https://kimwonho.tistory.com/30", img: "https://img1.daumcdn.net/thumb/C120x120/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FyZZSt%2FbtsQhtdvLJk%2FAAAAAAAAAAAAAAAAAAAAANmp8jclO2JD4Q6jSquQeBzCxUvIMlqF9GYzXfg3t2R_%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1785509999%26allow_ip%3D%26allow_referer%3D%26signature%3DKVNz00NeabEYDuKBNHf1YRcNo%252Bw%253D" },
+      { t: "《경남문화예술진흥원 지역문화예술육성지원사업 공모: 문학_개인(생애최초)》", url: "https://kimwonho.tistory.com/33", img: "https://img1.daumcdn.net/thumb/C120x120/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FseWue%2FbtsOE7PnDzi%2FAAAAAAAAAAAAAAAAAAAAAJll-x6kbkffhmvt7misne6PP9rV7lBfZMSpToeWSkUi%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1785509999%26allow_ip%3D%26allow_referer%3D%26signature%3Dw0iYquMG7JjGYBYwgh3yoEqz2GU%253D" },
+      { t: "《한국문화예술위원회 후원 전국 예비 극작가 인큐베이팅 프로젝트-희곡 읽기 좋은 날》", url: "https://kimwonho.tistory.com/29", img: "https://img1.daumcdn.net/thumb/C120x120/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FEWWH2%2FbtsOClViUNs%2FAAAAAAAAAAAAAAAAAAAAAD-iXlBOamRJLO5_sEJeH0GtUN7VTxRI2kaN4Uea2rTn%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1785509999%26allow_ip%3D%26allow_referer%3D%26signature%3DODqywCOlRElIQ17h0U819NZ9UGs%253D" }
+    ] }
+  ]
+}; /* ABOUT 끝 */
+
+/* ── 방문록에 옮겨 적은 말들 ── */
+const GUESTBOOK = [
+  { name: "첫 손님", date: "2026-07-08", text: "(예시) 남겨 주신 말은 이런 모습으로 벽에 옮겨 적힙니다." }
+];
+
+/* =========================================================
+   여기서부터는 화면을 만드는 부분입니다. 고치지 않아도 됩니다.
+   ========================================================= */
+
+const SEC = {
+  poem:     { label: "시",        short: "시",   ghost: "詩" },
+  prose:    { label: "산문·비평", short: "산문", ghost: "文" },
+  research: { label: "연구",      short: "연구", ghost: "硏" }
+};
+
+const ICONS = {
+  instagram: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.2" cy="6.8" r="1.15" fill="currentColor" stroke="none"/></svg>',
+  blog: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4.5 5h15A1.5 1.5 0 0 1 21 6.5v9a1.5 1.5 0 0 1-1.5 1.5h-5.2L12 20l-2.3-3H4.5A1.5 1.5 0 0 1 3 15.5v-9A1.5 1.5 0 0 1 4.5 5Z"/><text x="12" y="13.8" text-anchor="middle" font-size="8.5" font-weight="700" font-family="Arial, sans-serif" fill="currentColor" stroke="none">b</text></svg>'
+};
+
+const esc = s => String(s).replace(/[&<>"']/g, c => (
+  { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]
+));
+
+function fmtDate(s){
+  if(!s) return "";
+  const p = String(s).split("-").map(Number);
+  return p.length >= 3 ? `${p[0]}. ${p[1]}. ${p[2]}.` : `${p[0]}. ${p[1] || ""}.`;
+}
+
+
+function rabbitFace(v=0){
+  const blue = v === 1 || v === 4 ? 'var(--cyan)' : 'currentColor';
+  const ears = [
+    '<rect x="5" y="1" width="5" height="8"/><rect x="14" y="1" width="5" height="8"/>',
+    '<rect x="4" y="2" width="5" height="8"/><rect x="16" y="1" width="4" height="9" transform="rotate(18 18 5)"/>',
+    '<rect x="5" y="0" width="4" height="9"/><rect x="15" y="0" width="4" height="9"/>',
+    '<rect x="3" y="3" width="8" height="4"/><rect x="14" y="1" width="5" height="8"/>',
+    '<rect x="5" y="1" width="5" height="8"/><rect x="15" y="2" width="5" height="7"/>'
+  ][v%5];
+  const face = [
+    '<rect x="7" y="13" width="3" height="3" fill="white"/><rect x="15" y="13" width="3" height="3" fill="white"/><rect x="11" y="18" width="3" height="2" fill="white"/>',
+    '<rect x="7" y="13" width="3" height="3" fill="white"/><rect x="15" y="14" width="4" height="1" fill="white"/><rect x="11" y="18" width="3" height="2" fill="white"/>',
+    '<rect x="6" y="12" width="5" height="5" fill="none" stroke="white"/><rect x="14" y="12" width="5" height="5" fill="none" stroke="white"/><rect x="11" y="14" width="3" height="1" fill="white"/><rect x="11" y="19" width="3" height="1" fill="white"/>',
+    '<rect x="7" y="14" width="4" height="1" fill="white"/><rect x="15" y="14" width="4" height="1" fill="white"/><rect x="10" y="18" width="5" height="1" fill="white"/>',
+    '<rect x="7" y="13" width="2" height="3" fill="white"/><rect x="16" y="13" width="2" height="3" fill="white"/><rect x="10" y="18" width="2" height="2" fill="white"/><rect x="13" y="18" width="2" height="2" fill="white"/>'
+  ][v%5];
+  return `<svg viewBox="0 0 24 24" aria-hidden="true" style="color:${blue}"><g fill="currentColor">${ears}<rect x="3" y="8" width="19" height="14"/><rect x="1" y="11" width="3" height="8"/><rect x="21" y="11" width="3" height="8"/></g>${face}</svg>`;
+}
+
+function rabbitBody(v=0){
+  const common = '<rect x="8" y="3" width="5" height="12"/><rect x="20" y="3" width="5" height="12"/><rect x="6" y="12" width="21" height="14"/><rect x="3" y="15" width="4" height="8"/><rect x="26" y="15" width="4" height="8"/>';
+  const faces = [
+    '<rect x="10" y="17" width="3" height="3" fill="white"/><rect x="21" y="17" width="3" height="3" fill="white"/><rect x="15" y="22" width="4" height="2" fill="white"/>',
+    '<rect x="10" y="17" width="3" height="3" fill="white"/><rect x="21" y="18" width="4" height="1" fill="white"/><rect x="15" y="22" width="4" height="2" fill="white"/>',
+    '<rect x="9" y="16" width="6" height="6" fill="none" stroke="white" stroke-width="2"/><rect x="20" y="16" width="6" height="6" fill="none" stroke="white" stroke-width="2"/><rect x="15" y="18" width="5" height="2" fill="white"/>',
+    '<rect x="10" y="18" width="5" height="1" fill="white"/><rect x="21" y="18" width="5" height="1" fill="white"/><rect x="16" y="22" width="3" height="1" fill="white"/>',
+    '<rect x="10" y="17" width="2" height="3" fill="white"/><rect x="22" y="17" width="2" height="3" fill="white"/><rect x="15" y="22" width="2" height="2" fill="white"/><rect x="18" y="22" width="2" height="2" fill="white"/>'
+  ][v%5];
+  const bodies = [
+    '<rect x="10" y="26" width="16" height="12"/><rect x="7" y="35" width="9" height="4"/><rect x="21" y="35" width="9" height="4"/><rect x="27" y="28" width="5" height="5"/>',
+    '<rect x="9" y="26" width="18" height="9"/><rect x="4" y="31" width="9" height="4"/><rect x="24" y="28" width="9" height="4"/><rect x="28" y="23" width="5" height="5"/>',
+    '<rect x="10" y="26" width="16" height="12"/><rect x="6" y="29" width="7" height="5"/><rect x="23" y="29" width="7" height="5"/><rect x="12" y="31" width="12" height="8" fill="var(--paper)"/><rect x="17" y="31" width="2" height="8"/>',
+    '<rect x="6" y="27" width="24" height="8"/><rect x="2" y="31" width="8" height="4"/><rect x="27" y="30" width="6" height="5"/><rect x="12" y="27" width="10" height="2" fill="white"/>',
+    '<rect x="10" y="26" width="16" height="11"/><rect x="5" y="28" width="6" height="5"/><rect x="25" y="28" width="6" height="5"/><rect x="8" y="36" width="10" height="4"/><rect x="22" y="36" width="9" height="4"/>'
+  ][v%5];
+  return `<svg viewBox="0 0 36 42" aria-hidden="true"><g fill="currentColor">${common}${bodies}</g>${faces}</svg>`;
+}
+
+function paintNavRabbits(){
+  document.querySelectorAll('.rabbit-nav').forEach(el => el.innerHTML = rabbitFace(Number(el.dataset.rabbit || 0)));
+}
+
+function renderRows(list){
+  return list.map((w, i) =>
+    `<a class="work-line" href="#/w/${esc(w.id)}" data-title="${esc(w.title)}" data-section="${esc(w.section)}" data-meta="${esc(w.meta || fmtDate(w.date))}" data-excerpt="${esc(String(w.body || '').replace(/\s+/g,' ').slice(0,96))}">
+       <span class="num">${String(i + 1).padStart(2,'0')}</span><span class="title">${esc(w.title)}</span>
+     </a>`).join("");
+}
+
+function renderHome(){
+  const links = PROFILE.links.map(l => `<a href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)}</a>`).join("");
+  const video = PROFILE.youtube ? `<a class="home-vlog" href="${esc(PROFILE.youtube.url)}" target="_blank" rel="noopener" aria-label="${esc(PROFILE.youtube.title)} 유튜브 열기"><img src="${esc(PROFILE.youtube.thumbnail)}" alt="${esc(PROFILE.youtube.title)}" loading="lazy"><span>YOUTUBE ↗</span></a>` : '';
+  return `<section class="home-stage" aria-label="김원호 홈페이지">
+    <div class="home-axis" aria-hidden="true"></div><span class="poem-seal" aria-hidden="true">詩</span>
+    <div class="pixel-rabbit rb1" data-depth="1.4">${rabbitBody(0)}</div>
+    <div class="pixel-rabbit rb2" data-depth="-.8">${rabbitBody(1)}</div>
+    <div class="pixel-rabbit rb3" data-depth="1">${rabbitBody(2)}</div>
+    <div class="pixel-rabbit rb4" data-depth="-1.2">${rabbitBody(3)}</div>
+    <div class="pixel-rabbit rb5" data-depth=".7">${rabbitBody(4)}</div>
+    <div class="home-identity"><div class="portrait-chip"><img src="${esc(PROFILE.photo)}" alt="${esc(SITE.author)}의 사진" onerror="this.style.visibility='hidden'"></div><div><p class="home-name">${esc(PROFILE.names[2] || 'Kim wonho')}</p><p class="home-korean">${esc(PROFILE.names[0])} · ${esc(PROFILE.names[1])}</p><p class="home-role">${esc(PROFILE.roles.join(' / '))}</p></div></div>
+    <div class="home-contact"><a class="mail" href="mailto:${esc(PROFILE.email)}">${esc(PROFILE.email)}</a>${links}</div>${video}
+  </section>`;
+}
+
+function renderList(s){
+  const list = WORKS.filter(w => w.section === s);
+  const initial = list[0];
+  const body = list.length ? renderRows(list) : `<p class="work-empty">아직 올린 글이 없습니다.</p>`;
+  return `<section class="page-shell">
+    <div class="page-head"><h1 class="page-title">${SEC[s].label}</h1><span class="page-code">${String(['poem','prose','research'].indexOf(s)+1).padStart(2,'0')} / INDEX</span></div>
+    <div class="work-layout"><div class="work-list">${body}</div>
+      <aside class="work-preview" aria-hidden="true"><div class="preview-mark">${SEC[s].ghost}</div><div class="preview-copy"><p class="preview-title">${initial ? esc(initial.title) : SEC[s].label}</p><p class="preview-excerpt">${initial ? esc(String(initial.body||'').replace(/\s+/g,' ').slice(0,96)) : '새 글이 놓일 자리입니다.'}</p><p class="preview-meta">${initial ? esc(initial.meta || fmtDate(initial.date)) : 'KIM WONHO / ARCHIVE'}</p></div></aside>
+    </div></section>`;
+}
+
+function bodyHtml(w){
+  if(w.section === "poem")
+    return `<div class="w-body poem">${esc(w.body)}</div>`;
+  const ps = w.body.split(/\n{2,}/)
+    .map(p => `<p>${esc(p).replace(/\n/g, "<br>")}</p>`).join("");
+  return `<div class="w-body prose">${ps}</div>`;
+}
+
+function renderWork(w){
+  const list = WORKS.filter(x => x.section === w.section);
+  const i = list.findIndex(x => x.id === w.id);
+  const prev = list[i + 1], next = list[i - 1];
+  return `<section class="reader-shell"><div class="reader">
+    <p class="crumb mono"><a href="#/${w.section}">${SEC[w.section].label}</a></p>
+    <h1 class="w-title">${esc(w.title)}</h1>
+    <p class="w-meta">${fmtDate(w.date)}${w.meta ? " · " + esc(w.meta) : ""}</p>
+    ${bodyHtml(w)}
+    ${w.link ? `<a class="wlink" href="${esc(w.link)}" target="_blank" rel="noopener">원문 보기 →</a>` : ""}
+    ${w.note ? `<p class="w-note">${esc(w.note)}</p>` : ""}
+    <nav class="pn">
+      <span>${prev ? `<a href="#/w/${esc(prev.id)}">← ${esc(prev.title)}</a>` : ""}</span>
+      <a class="mid" href="#/${w.section}">목록</a>
+      <span style="text-align:right">${next ? `<a href="#/w/${esc(next.id)}">${esc(next.title)} →</a>` : ""}</span>
+    </nav>
+  </div></section>`;
+}
+
+const normIt = it => typeof it === "string" ? { t: it, url: "", img: "" } : it;
+
+function renderAbout(){
+  const facts = ABOUT.facts.map(f => {
+    const v = f.k === "메일" ? `<a href="mailto:${esc(f.v)}">${esc(f.v)}</a>` : esc(f.v);
+    return `<div class="fact"><span class="fk">${esc(f.k)}</span><span class="fv">${v}</span></div>`;
+  }).join("");
+  let count = 0;
+  const groups = ABOUT.groups.map(g => `<div class="grp"><span class="k">${esc(g.h)}</span><div class="grp-list">${g.items.map(raw => {
+    const o = normIt(raw), no = String(++count).padStart(2,'0');
+    const stk = o.img ? `<img class="stk" loading="lazy" src="${esc(o.img)}" alt="" onerror="this.style.visibility='hidden'">` : '';
+    const inner = `<span class="tx">${esc(o.t)}</span><span class="tail">${stk}<span class="arr">${o.url?'↗':''}</span></span>`;
+    return o.url ? `<a class="grp-it" data-no="${no}" href="${esc(o.url)}" target="_blank" rel="noopener">${inner}</a>` : `<div class="grp-it" data-no="${no}">${inner}</div>`;
+  }).join('')}</div></div>`).join('');
+  return `<section class="page-shell"><div class="page-head"><h1 class="page-title">소개</h1><span class="page-code">04 / ARCHIVE</span></div><div class="about-layout"><div class="about-main"><div class="facts">${facts}</div>${groups}</div><aside class="sticker-preview" aria-hidden="true"><div class="sticker-stage empty"></div><p class="sticker-label">항목 위에 포인터를 올리면 기록의 표지가 나타납니다.</p><span class="sticker-source">KIM WONHO / RECORDS</span></aside></div></section>`;
+}
+
+function renderGuest(){
+  const items = GUESTBOOK.map(g => `<div class="gb"><p class="who">${esc(g.name || '익명')} · ${fmtDate(g.date)}</p><p class="msg">${esc(g.text)}</p></div>`).join('');
+  const hint = SITE.guestbookEndpoint ? '' : `<p class="hint">보내기를 누르면 메일 창이 열립니다.</p>`;
+  return `<section class="page-shell"><div class="page-head"><h1 class="page-title">방문록</h1><span class="page-code">05 / GUEST</span></div><div class="guest-layout"><p class="page-note">읽고 가신 자리에 말을 남겨 주세요.</p><div class="gb-list">${items}</div><span class="k">말 남기기</span><form class="gbf" id="gbf"><input name="name" aria-label="이름" placeholder="이름 (비워 두어도 됩니다)"><textarea name="message" aria-label="내용" placeholder="여기에 적어 주세요." required></textarea><button type="submit">보내기</button><p id="gb-status" aria-live="polite"></p></form>${hint}</div></section>`;
+}
+
+function gbSubmit(e){
+  e.preventDefault();
+  const f = e.target;
+  const name = f.elements["name"].value.trim();
+  const msg  = f.elements["message"].value.trim();
+  const st = document.getElementById("gb-status");
+  if(!msg){ st.textContent = "내용을 적어 주세요."; return; }
+  if(SITE.guestbookEndpoint){
+    st.textContent = "보내는 중…";
+    fetch(SITE.guestbookEndpoint, {
+      method: "POST",
+      headers: { "Accept": "application/json", "Content-Type": "application/json" },
+      body: JSON.stringify({ 이름: name || "익명", 내용: msg })
+    }).then(r => {
+      st.textContent = r.ok
+        ? "잘 도착했습니다. 남겨 주셔서 고맙습니다."
+        : "전송하지 못했습니다. 잠시 후 다시 시도해 주세요.";
+      if(r.ok) f.reset();
+    }).catch(() => {
+      st.textContent = "전송하지 못했습니다. 잠시 후 다시 시도해 주세요.";
+    });
+  } else {
+    location.href = "mailto:" + SITE.email
+      + "?subject=" + encodeURIComponent("[방문록] " + (name || "익명"))
+      + "&body=" + encodeURIComponent(msg);
+    st.textContent = "메일 창이 열렸습니다. 그대로 보내 주시면 됩니다.";
+  }
+}
+
+/* ── 길 찾기 ── */
+const app = document.getElementById("app");
+
+function markNav(key){
+  document.querySelectorAll("nav.top a").forEach(a =>
+    a.classList.toggle("on", a.dataset.n === key));
+}
+
+
+function setupHomeMotion(){
+  const stage = document.querySelector('.home-stage');
+  if(!stage || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const glyphs = [...stage.querySelectorAll('.pixel-rabbit')];
+  stage.addEventListener('pointermove', e => {
+    const x = (e.clientX / innerWidth - .5) * 10, y = (e.clientY / innerHeight - .5) * 10;
+    glyphs.forEach(g => { const d = Number(g.dataset.depth || 1); g.style.setProperty('--dx', `${x*d}px`); g.style.setProperty('--dy', `${y*d}px`); });
+  }, {passive:true});
+}
+
+function setupListPreview(){
+  const preview = document.querySelector('.work-preview');
+  if(!preview) return;
+  const lines = [...document.querySelectorAll('.work-line')];
+  const show = line => {
+    lines.forEach(x => x.classList.toggle('active', x === line));
+    const title = preview.querySelector('.preview-title'), excerpt = preview.querySelector('.preview-excerpt'), meta = preview.querySelector('.preview-meta');
+    if(title) title.textContent = line.dataset.title || '';
+    if(excerpt) excerpt.textContent = line.dataset.excerpt || '';
+    if(meta) meta.textContent = line.dataset.meta || '';
+  };
+  lines.forEach(line => { line.addEventListener('pointerenter',()=>show(line)); line.addEventListener('focus',()=>show(line)); });
+  if(lines[0]) show(lines[0]);
+}
+
+function setupStickerPreview(){
+  const box = document.querySelector('.sticker-preview');
+  if(!box) return;
+  const stage = box.querySelector('.sticker-stage'), label = box.querySelector('.sticker-label'), source = box.querySelector('.sticker-source');
+  const show = row => {
+    const im = row.querySelector('.stk');
+    stage.innerHTML = '';
+    stage.classList.toggle('empty', !im);
+    if(im){ const cp = document.createElement('img'); cp.src = im.currentSrc || im.src; cp.alt = ''; stage.appendChild(cp); }
+    label.textContent = row.querySelector('.tx')?.textContent || '';
+    source.textContent = row.href ? 'OPEN RECORD ↗' : 'ARCHIVE';
+  };
+  const rows = [...document.querySelectorAll('.grp-it')];
+  rows.forEach(row => { row.addEventListener('pointerenter',()=>show(row)); row.addEventListener('focus',()=>show(row)); });
+  const first = rows.find(r => r.querySelector('.stk')) || rows[0]; if(first) show(first);
+}
+
+function route(){
+  const seg = location.hash.replace(/^#\/?/, "").split("/");
+  let html, ttl = SITE.title, nav = "";
+  if(seg[0] === "w" && seg[1]){
+    const w = WORKS.find(x => x.id === decodeURIComponent(seg[1]));
+    if(w){ html = renderWork(w); ttl = `${w.title} — ${SITE.title}`; nav = w.section; }
+    else { html = renderHome(); }
+  } else if(SEC[seg[0]]){
+    html = renderList(seg[0]); ttl = `${SEC[seg[0]].label} — ${SITE.title}`; nav = seg[0];
+  } else if(seg[0] === "about"){
+    html = renderAbout(); ttl = `소개 — ${SITE.title}`; nav = "about";
+  } else if(seg[0] === "guest"){
+    html = renderGuest(); ttl = `방문록 — ${SITE.title}`; nav = "guest";
+  } else {
+    html = renderHome();
+  }
+  app.innerHTML = html;
+  document.title = ttl;
+  markNav(nav);
+  window.scrollTo(0, 0);
+  const gf = document.getElementById("gbf");
+  if(gf) gf.addEventListener("submit", gbSubmit);
+  setupHomeMotion(); setupListPreview(); setupStickerPreview();
+}
+
+window.addEventListener("hashchange", route);
+paintNavRabbits();
+route();
+
+/* ── 푸른 안개: 한 번 걷히면 그 자리에서는 다시 끼지 않습니다 ── */
+(function(){
+  const m = document.getElementById("mist");
+  if(!m) return;
+  let seen = false;
+  try{
+    seen = sessionStorage.getItem("mist") === "1";
+    sessionStorage.setItem("mist", "1");
+  }catch(e){}
+  if(seen){ m.remove(); return; }
+  setTimeout(() => { if(m.parentNode) m.remove(); }, 3600);
+})();
+
+/* ── 조용한 숫자: 누적(오늘) ── */
+(function(){
+  if(!SITE.goatcounter) return;
+  const base = "https://" + SITE.goatcounter + ".goatcounter.com";
+  const s = document.createElement("script");
+  s.setAttribute("data-goatcounter", base + "/count");
+  s.async = true;
+  s.src = "https://gc.zgo.at/count.js";
+  document.body.appendChild(s);
+  const el = document.getElementById("hits");
+  if(!el) return;
+  const num = t => String(t == null ? "" : t).replace(/[^0-9]/g, "") || "0";
+  const d = new Date();
+  const p = n => String(n).padStart(2, "0");
+  const today = d.getFullYear() + "-" + p(d.getMonth() + 1) + "-" + p(d.getDate());
+  Promise.all([
+    fetch(base + "/counter/TOTAL.json").then(r => r.ok ? r.json() : null).catch(() => null),
+    fetch(base + "/counter/TOTAL.json?start=" + today).then(r => r.ok ? r.json() : null).catch(() => null)
+  ]).then(([a, b]) => {
+    if(!a) return;
+    el.textContent = num(a.count) + "(" + num(b && b.count) + ")";
+  }).catch(() => {});
+})();
+</script>
+</body>
+</html>
