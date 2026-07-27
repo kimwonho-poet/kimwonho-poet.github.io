@@ -262,7 +262,8 @@ footer{max-width:none;width:100%;margin:0;padding:18px 32px 36px;
   background:var(--grass);border-top:3px solid var(--ink);
   color:#f3ffe9;font-family:'DungGeunMo',var(--mono);font-size:12px}
 footer::before{display:none}
-#hits{color:#eaffdd}
+#hits{display:none;color:#eaffdd;font-size:9px;line-height:1;letter-spacing:.08em}
+body.is-home #hits{display:inline}
 
 .k{font-family:'DungGeunMo',var(--mono);font-size:13px;letter-spacing:.06em;color:var(--blue)}
 .page-note{font-family:var(--serif);font-size:14.5px;line-height:1.9;color:var(--sub)}
@@ -428,7 +429,7 @@ const SITE = {
   author: "김원호",
   email: "ssonss81@naver.com",
   guestbookEndpoint: "",  /* 방문록 전송 주소(안내문 참고). 비워 두면 메일로 작동합니다. */
-  goatcounter: ""         /* 방문자 수 표시용 GoatCounter 코드(안내문 참고). 비워 두면 숫자가 표시되지 않습니다. */
+  visitorCounterNamespace: "kimwonho-poet-github-io-9f4c7a2d"
 };
 
 /* ── 첫 화면 ── */
@@ -739,11 +740,11 @@ function markNav(key){
 
 function route(){
   const seg = location.hash.replace(/^#\/?/, "").split("/");
-  let html, ttl = SITE.title, nav = "";
+  let html, ttl = SITE.title, nav = "", home = false;
   if(seg[0] === "w" && seg[1]){
     const w = WORKS.find(x => x.id === decodeURIComponent(seg[1]));
     if(w){ html = renderWork(w); ttl = `${w.title} — ${SITE.title}`; nav = w.section; }
-    else { html = renderHome(); }
+    else { html = renderHome(); home = true; }
   } else if(SEC[seg[0]]){
     html = renderList(seg[0]); ttl = `${SEC[seg[0]].label} — ${SITE.title}`; nav = seg[0];
   } else if(seg[0] === "about"){
@@ -752,10 +753,13 @@ function route(){
     html = renderGuest(); ttl = `방문록 — ${SITE.title}`; nav = "guest";
   } else {
     html = renderHome();
+    home = true;
   }
   app.innerHTML = html;
   document.title = ttl;
   markNav(nav);
+  document.body.classList.toggle("is-home", home);
+  paintVisitorCounter();
   window.scrollTo(0, 0);
   const gf = document.getElementById("gbf");
   if(gf) gf.addEventListener("submit", gbSubmit);
@@ -782,27 +786,46 @@ route();
   setTimeout(() => { if(m.parentNode) m.remove(); }, 3600);
 })();
 
-/* ── 조용한 숫자: 누적(오늘) ── */
-(function(){
-  if(!SITE.goatcounter) return;
-  const base = "https://" + SITE.goatcounter + ".goatcounter.com";
-  const s = document.createElement("script");
-  s.setAttribute("data-goatcounter", base + "/count");
-  s.async = true;
-  s.src = "https://gc.zgo.at/count.js";
-  document.body.appendChild(s);
+/* ── 조용한 숫자: 전체/오늘 ──
+   같은 브라우저에서는 한국 날짜 기준 하루에 한 번만 더합니다. */
+function paintVisitorCounter(){
   const el = document.getElementById("hits");
-  if(!el) return;
-  const num = t => String(t == null ? "" : t).replace(/[^0-9]/g, "") || "0";
-  const d = new Date();
-  const p = n => String(n).padStart(2, "0");
-  const today = d.getFullYear() + "-" + p(d.getMonth() + 1) + "-" + p(d.getDate());
+  const c = window.__visitorCounts;
+  if(!el || !c) return;
+  el.textContent = c.total + "/" + c.daily;
+}
+
+(function(){
+  const ns = SITE.visitorCounterNamespace;
+  if(!ns) return;
+  const parts = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Seoul", year: "numeric", month: "2-digit", day: "2-digit"
+  }).formatToParts(new Date()).reduce((o, x) => (o[x.type] = x.value, o), {});
+  const today = parts.year + "-" + parts.month + "-" + parts.day;
+  const storageKey = "kimwonho-visit-" + today;
+  let alreadyCounted = false;
+  try{
+    alreadyCounted = localStorage.getItem(storageKey) === "1";
+    if(!alreadyCounted) localStorage.setItem(storageKey, "1");
+  }catch(e){}
+
+  const base = "https://api.counterapi.dev/v1/" + encodeURIComponent(ns) + "/";
+  const action = alreadyCounted ? "/" : "/up";
+  const get = name => fetch(base + encodeURIComponent(name) + action, {
+    cache: "no-store", credentials: "omit"
+  }).then(r => {
+    if(!r.ok) throw new Error("counter");
+    return r.json();
+  });
   Promise.all([
-    fetch(base + "/counter/TOTAL.json").then(r => r.ok ? r.json() : null).catch(() => null),
-    fetch(base + "/counter/TOTAL.json?start=" + today).then(r => r.ok ? r.json() : null).catch(() => null)
+    get("total"),
+    get("daily-" + today)
   ]).then(([a, b]) => {
-    if(!a) return;
-    el.textContent = num(a.count) + "(" + num(b && b.count) + ")";
+    window.__visitorCounts = {
+      total: Number(a.count) || 0,
+      daily: Number(b.count) || 0
+    };
+    paintVisitorCounter();
   }).catch(() => {});
 })();
 </script>
