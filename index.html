@@ -382,6 +382,8 @@ nav.top{font-family:'DungGeunMo',var(--mono);font-size:15px;font-weight:700;lett
   nav.top{font-size:13px}
 }
 </style>
+<link rel="stylesheet" href="assets/home-motion/scene.css?v=1">
+<script src="assets/home-motion/scene.js?v=1" defer></script>
 </head>
 <body>
 
@@ -580,32 +582,31 @@ function renderRows(list){
 }
 
 function renderHome(){
-  const spots = SCENE.spots.map(s => {
+  const spots = SCENE.spots.map((s, i) => {
     const href = s.key === "youtube"
       ? (SCENE.youtube || (PROFILE.youtube && PROFILE.youtube.url) || "")
       : s.href;
     if(!href) return "";
-    const Sx = 10000 / s.W, Sy = 10000 / s.H;
-    const Px = 100 * s.L / (100 - s.W), Py = 100 * s.T / (100 - s.H);
-    const box = `left:${s.L}%;top:${s.T}%;width:${s.W}%;height:${s.H}%`
-      + (s.lvx ? `;--lvx:${s.lvx}%` : "");
-    const cut = `background-image:url('${SCENE.img}');`
-      + `background-size:${Sx.toFixed(2)}% ${Sy.toFixed(2)}%;`
-      + `background-position:${Px.toFixed(3)}% ${Py.toFixed(3)}%`
-      + (s.clip ? `;clip-path:${s.clip};-webkit-clip-path:${s.clip}` : "");
+    const box = `--actor:${i}`;
     const ext = s.key === "youtube";
     const badge = s.person ? `<span class="lv">${esc(SCENE.nameplate)}</span>` : "";
-    return `<a class="hs${s.person ? " person" : ""}" style="${box}" href="${esc(href)}"`
+    return `<a class="hs actor actor-${s.key}${s.person ? " person" : " rabbit"}" style="${box}" href="${esc(href)}"`
       + (ext ? ` target="_blank" rel="noopener"` : "")
-      + ` aria-label="${esc(s.label)}"><span class="cut" style="${cut}"></span>${badge}<span class="tip">${esc(s.label)}</span></a>`;
+      + ` aria-label="${esc(s.label)}"><span class="actor-shadow" aria-hidden="true"></span><span class="actor-body" aria-hidden="true"><span class="actor-sprite"></span></span>${badge}<span class="tip">${esc(s.label)}</span></a>`;
   }).join("");
   const links = PROFILE.links.map(l =>
     `<a href="${esc(l.url)}" target="_blank" rel="noopener" aria-label="${esc(l.label)}">${ICONS[l.icon] || esc(l.label)}</a>`).join("");
-  return `<div class="hero" id="scene">
+  return `<div class="scene-shell">
+  <div class="hero" id="scene" role="region" aria-label="김원호와 토끼들이 달리는 들판">
     <div class="field">
-      <img class="bg" src="${esc(SCENE.img)}" alt="들판을 달리는 ${esc(SITE.author)}와 토끼들">
+      <img class="bg" src="${esc(SCENE.img)}" alt="들판을 달리는 ${esc(SITE.author)}와 토끼들" fetchpriority="high" width="1586" height="992">
       ${spots}
     </div>
+  </div>
+  <button class="scene-toggle" type="button" aria-label="애니메이션 일시 정지" title="애니메이션 일시 정지" hidden>
+    <svg class="motion-pause" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="14" y="4" width="4" height="16" rx="1"/><rect x="6" y="4" width="4" height="16" rx="1"/></svg>
+    <svg class="motion-play" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+  </button>
   </div>
   <div class="pf-mini">
     <a href="mailto:${esc(PROFILE.email)}">${esc(PROFILE.email)}</a>
@@ -768,6 +769,7 @@ function route(){
   if(sc && sc.scrollWidth > sc.clientWidth){
     sc.scrollLeft = sc.scrollWidth * 0.635 - sc.clientWidth / 2;
   }
+  window.homeMotion?.mount(sc);
 }
 
 window.addEventListener("hashchange", route);
