@@ -1,14 +1,8 @@
 (() => {
   "use strict";
   const assets = new URL(".", document.currentScript.src);
-  const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
   let dispose = () => {};
-  let userPaused = null;
   let loaded;
-  try {
-    const saved = sessionStorage.getItem("home-motion-paused");
-    if (saved !== null) userPaused = saved === "true";
-  } catch {}
 
   function loadAssets() {
     if (!loaded) {
@@ -36,28 +30,23 @@
     let active = true;
     let visible = true;
     let ready = false;
+    // Each home entry starts playing; pause is limited to the current visit.
+    let userPaused = false;
+    shell.classList.add("motion-requested");
 
     function sync() {
-      const paused = userPaused ?? reducedMotion.matches;
+      const paused = userPaused;
       shell.classList.toggle("is-paused", paused);
       shell.classList.toggle("is-playing", ready && !paused && visible && !document.hidden);
-      shell.classList.toggle("motion-requested", userPaused === false);
       const label = paused ? "애니메이션 재생" : "애니메이션 일시 정지";
       button.setAttribute("aria-label", label);
       button.title = label;
     }
     button.addEventListener("click", () => {
-      userPaused = !(userPaused ?? reducedMotion.matches);
-      try { sessionStorage.setItem("home-motion-paused", String(userPaused)); } catch {}
+      userPaused = !userPaused;
       sync();
     }, options);
     document.addEventListener("visibilitychange", sync, options);
-    reducedMotion.addEventListener("change", () => {
-      // A newly enabled system preference takes precedence over an earlier play choice.
-      userPaused = null;
-      try { sessionStorage.removeItem("home-motion-paused"); } catch {}
-      sync();
-    }, options);
     const observer = new IntersectionObserver(entries => {
       visible = entries[0].isIntersecting;
       sync();
