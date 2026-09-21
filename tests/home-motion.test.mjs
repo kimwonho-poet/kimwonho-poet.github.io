@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import { readFileSync, statSync } from "node:fs";
 import { execFileSync } from "node:child_process";
 import { runInNewContext } from "node:vm";
+import { readContent, replaceContent } from "../lib/content.mjs";
 
 const root = new URL("../", import.meta.url);
 const html = readFileSync(new URL("index.html", root), "utf8");
@@ -54,7 +55,11 @@ const flush = () => new Promise(resolve => setImmediate(resolve));
 
 test("existing public content and editor remain unchanged", () => {
   const original = execFileSync("git", ["show", "0a27c2d4b37fd27dc0a70672b9c9a6fc9522877e:index.html"], { cwd: root, encoding: "utf8" });
-  const content = source => source.slice(source.indexOf("const SITE ="), source.indexOf("const SEC ="));
+  const content = source => {
+    const data = readContent(source);
+    for (const section of ["works", "about", "profile"]) source = replaceContent(source, section, data[section]);
+    return source.slice(source.indexOf("const SITE ="), source.indexOf("const SEC ="));
+  };
   assert.equal(content(html), content(original));
   const editor = readFileSync(new URL("atelier-x7k2.html", root), "utf8");
   assert.equal(editor, execFileSync("git", ["show", "0a27c2d4b37fd27dc0a70672b9c9a6fc9522877e:atelier-x7k2.html"], { cwd: root, encoding: "utf8" }));
