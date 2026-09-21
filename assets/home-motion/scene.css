@@ -1,0 +1,59 @@
+/* Layered pixel-art animation. Layout and content outside the home stay unchanged. */
+.scene-shell{position:relative;width:100vw;margin-left:calc(50% - 50vw)}
+.scene-shell .hero{width:100%;margin-left:0;margin-top:-50px;height:calc(100svh - 126px);min-height:390px}
+.scene-shell .field{aspect-ratio:8/5;width:max(100vw,calc((100svh - 126px)*1.6),624px);height:auto}
+.scene-shell .bg{object-fit:fill}
+.actor{--cycle:.64s;z-index:2;min-width:44px;min-height:44px;outline-offset:5px}
+.actor-about{left:55.1%;top:34.4%;width:16%;height:40%}
+.actor-poem{left:13.6%;top:73%;width:9.2%;height:14.72%;--cycle:.88s}
+.actor-prose{left:30.1%;top:67.1%;width:9.7%;height:15.52%;--cycle:.78s}
+.actor-research{left:43.4%;top:73.1%;width:10%;height:16%;--cycle:.92s}
+.actor-guest{left:70.2%;top:71%;width:9.7%;height:15.52%;--cycle:.82s}
+.actor-youtube{left:82%;top:62.1%;width:10%;height:16%;--cycle:.86s}
+.actor-body,.actor-sprite{position:absolute;inset:0;pointer-events:none}
+.actor-body,.actor-shadow{visibility:hidden}
+.actor-sprite{background-image:url("sprites.webp");background-repeat:no-repeat;background-size:400% auto;image-rendering:pixelated}
+.person .actor-sprite{background-position:0 0;--row:0%}
+.rabbit .actor-sprite{background-position:0 100%;--row:100%}
+.actor-prose .actor-sprite,.actor-guest .actor-sprite{filter:sepia(.38) saturate(.88)}
+.actor-shadow{position:absolute;left:25%;right:11%;height:5%;bottom:12%;background:rgba(30,64,34,.23);border-radius:50%;pointer-events:none}
+.person .actor-shadow{bottom:2%;left:21%;right:12%;height:2.5%}
+.scene-ready .actor-body,.scene-ready .actor-shadow{visibility:visible}
+.scene-ready .actor-sprite{animation:stride var(--cycle) steps(1,end) infinite;animation-delay:calc(var(--actor)*-.17s)}
+.scene-ready .person .actor-body{animation:jog var(--cycle) ease-in-out infinite}
+.scene-ready .rabbit .actor-body{animation:bound var(--cycle) cubic-bezier(.38,0,.62,1) infinite;animation-delay:calc(var(--actor)*-.17s)}
+.scene-ready .actor-shadow{animation:footfall var(--cycle) ease-in-out infinite;animation-delay:calc(var(--actor)*-.17s)}
+.scene-shell .actor:hover,.scene-shell .actor:focus-visible{transform:none;z-index:4}
+.scene-shell .actor:focus-visible{outline:2px solid white;filter:drop-shadow(0 0 2px #1b2333)}
+.scene-shell .actor:hover .actor-body,.scene-shell .actor:focus-visible .actor-body{filter:drop-shadow(0 3px 3px rgba(20,40,50,.3)) brightness(1.04)}
+.scene-shell .actor .tip{font-size:13px;letter-spacing:0;border:1px solid rgba(27,35,51,.7);padding:3px 11px;box-shadow:2px 2px 0 rgba(27,35,51,.45)}
+.scene-shell .actor:focus-visible .tip{opacity:1}
+.scene-shell .person .lv{top:calc(16.667% - 32px);bottom:auto;margin:0;left:50%;font-size:16px;letter-spacing:0}
+.scene-shell .person .tip{top:calc(16.667% - 68px);bottom:auto;margin:0}
+.scene-shell .rabbit .tip{bottom:84%;margin-bottom:6px}
+.scene-toggle{position:absolute;z-index:8;right:max(20px,env(safe-area-inset-right));bottom:18px;display:grid;place-items:center;width:44px;height:44px;border:1px solid rgba(255,255,255,.7);border-radius:50%;background:rgba(248,253,255,.86);backdrop-filter:blur(8px);color:#233c4b;box-shadow:0 2px 8px rgba(25,52,69,.1);cursor:pointer}
+.scene-toggle[hidden]{display:none}
+.scene-toggle:hover{background:#fff}
+.scene-toggle:focus-visible{outline:2px solid #1a5fd0;outline-offset:3px}
+.scene-toggle .motion-play,.is-paused .scene-toggle .motion-pause{display:none}
+.is-paused .scene-toggle .motion-play{display:block}
+.scene-shell:not(.is-playing) .actor *,.scene-shell .actor:hover *,.scene-shell .actor:focus-visible *{animation-play-state:paused!important}
+@keyframes stride{0%{background-position:0 var(--row)}25%{background-position:33.333333% var(--row)}50%{background-position:66.666667% var(--row)}75%,100%{background-position:100% var(--row)}}
+@keyframes jog{0%,50%,100%{transform:translateY(-1%)}25%,75%{transform:translateY(-3%)}}
+@keyframes bound{0%,100%{transform:translate(0,-5%) rotate(-2deg)}25%{transform:translate(-1%,0) rotate(1deg)}50%{transform:translate(1%,1%) rotate(0)}75%{transform:translate(0,-10%) rotate(-3deg)}}
+@keyframes footfall{0%,100%{transform:scaleX(.92);opacity:.65}50%{transform:scaleX(1.04);opacity:1}75%{transform:scaleX(.86);opacity:.55}}
+@media(min-width:761px) and (min-aspect-ratio:2/1){
+  .scene-shell .field{width:100%;height:100%;aspect-ratio:auto}
+  .scene-shell .bg{object-fit:cover;object-position:center bottom}
+  .scene-shell .person{left:58%;top:28%;width:auto;height:46%;aspect-ratio:384/600}
+  .scene-shell .rabbit{width:auto;height:17%;aspect-ratio:1}
+}
+@media(max-width:760px){
+  .scene-shell .hero{margin-top:-32px;height:calc(100svh - 180px);min-height:370px}
+  .scene-shell .field{height:100%;width:auto;min-width:100%;position:relative;left:auto;bottom:auto;transform:none}
+  .scene-shell .person .lv{font-size:14px}
+  .scene-toggle{right:16px;bottom:16px}
+}
+@media(prefers-reduced-motion:reduce){
+  .scene-shell:not(.motion-requested) .actor *{animation:none!important}
+}
