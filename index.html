@@ -11,8 +11,8 @@
 <meta name="theme-color" content="#002fa8">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect x='2' y='11' width='12' height='3' fill='%23002fa8'/%3E%3C/svg%3E">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<link rel="stylesheet" href="assets/editor/rich-text.css?v=2">
-<script src="assets/editor/rich-render.js?v=2"></script>
+<link rel="stylesheet" href="assets/editor/rich-text.css?v=3">
+<script src="assets/editor/rich-render.js?v=3"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Noto+Serif+KR:wght@300;400;600&display=swap" rel="stylesheet">
@@ -386,6 +386,8 @@ nav.top{font-family:'DungGeunMo',var(--mono);font-size:15px;font-weight:700;lett
 </style>
 <link rel="stylesheet" href="assets/home-motion/scene.css?v=1">
 <script src="assets/home-motion/scene.js?v=2" defer></script>
+<link rel="stylesheet" href="assets/reader/reader.css?v=1">
+<script src="assets/reader/reader.bundle.js?v=1"></script>
 </head>
 <body>
 
@@ -655,7 +657,23 @@ function renderWork(w){
   const list = WORKS.filter(x => x.section === w.section);
   const i = list.findIndex(x => x.id === w.id);
   const prev = list[i + 1], next = list[i - 1];
-  return `<div class="reader">
+  const icon = name => `<svg aria-hidden="true" viewBox="0 0 24 24"><use href="assets/editor/icons.svg#${name}"></use></svg>`;
+  const signature = window.readerView?.textSignature(w.body + JSON.stringify(w.rich || null)) || "";
+  const resume = window.readerView?.isLongReading(w.section, w.body.length) || false;
+  return `<article class="reader reader--${w.section === "poem" ? "poem" : "essay"}" data-work-id="${esc(w.id)}" data-signature="${signature}" data-resume="${resume}">
+    <div class="reading-tools" aria-label="독서 설정">
+      <a class="reading-back" href="#/${w.section}" title="목록으로" aria-label="목록으로">${icon('arrow-left')}</a>
+      <div class="reading-options">
+        <div class="reading-size" role="group" aria-label="본문 글자 크기">
+          <button type="button" data-reader="smaller" title="글자 작게" aria-label="글자 작게">${icon('minus')}</button>
+          <output aria-label="글자 크기" aria-live="polite">18</output>
+          <button type="button" data-reader="larger" title="글자 크게" aria-label="글자 크게">${icon('plus')}</button>
+        </div>
+        <fieldset class="reading-themes"><legend class="sr-only">화면 밝기</legend>
+          ${[['light','밝은 화면','#ffffff'],['soft','차분한 화면','#dce3e7'],['dark','어두운 화면','#292d31']].map(([value,label,color]) => `<label title="${label}"><input class="sr-only" type="radio" name="reading-theme" data-theme="${value}" aria-label="${label}"><span class="theme-swatch" style="--swatch:${color}"></span></label>`).join('')}
+        </fieldset>
+      </div>
+    </div>
     <p class="crumb mono"><a href="#/${w.section}">${SEC[w.section].label}</a></p>
     <h1 class="w-title">${esc(w.title)}</h1>
     <p class="w-meta">${fmtDate(w.date)}${w.meta ? " · " + esc(w.meta) : ""}</p>
@@ -667,7 +685,8 @@ function renderWork(w){
       <a class="mid" href="#/${w.section}">목록</a>
       <span style="text-align:right">${next ? `<a href="#/w/${esc(next.id)}">${esc(next.title)} →</a>` : ""}</span>
     </nav>
-  </div>`;
+    <div class="reading-resume" role="status" hidden><span>읽던 곳으로 돌아왔습니다.</span><button type="button" data-reader="start">처음부터</button><button class="resume-close" type="button" data-reader="dismiss" title="안내 닫기" aria-label="안내 닫기">${icon('x')}</button></div>
+  </article>`;
 }
 
 const normIt = it => typeof it === "string" ? { t: it, url: "", img: "" } : it;
@@ -760,6 +779,7 @@ function markNav(key){
 }
 
 function route(){
+  window.readerView?.unmount();
   const seg = location.hash.replace(/^#\/?/, "").split("/");
   let html, ttl = SITE.title, nav = "", home = false;
   if(seg[0] === "w" && seg[1]){
@@ -790,6 +810,7 @@ function route(){
     sc.scrollLeft = sc.scrollWidth * 0.635 - sc.clientWidth / 2;
   }
   window.homeMotion?.mount(sc);
+  window.readerView?.mount();
 }
 
 window.addEventListener("hashchange", route);
