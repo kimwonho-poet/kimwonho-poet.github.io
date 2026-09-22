@@ -1,0 +1,335 @@
+{
+  "sourceSha256": "043d00a952a19d237a2b35a95507c9bb87a686e1f1dbfcc8390bf58467f89cc7",
+  "sourceLines": 14891,
+  "imported": [
+    {
+      "activityId": "poetpoonyum-interview",
+      "documentId": "document-1",
+      "title": "셋 세면 새 노래",
+      "kind": "interview",
+      "extent": "full",
+      "startLine": 2107,
+      "endLine": 2298,
+      "sha256": "29df5981b90fd8664acc7661a778bdf77ea972034d8b9ccad2ffd7131849fe02",
+      "characters": 4940
+    },
+    {
+      "activityId": "dongdae-2025",
+      "documentId": "document-1",
+      "title": "생을 다해 모래시계를",
+      "kind": "poem",
+      "extent": "full",
+      "startLine": 77,
+      "endLine": 182,
+      "sha256": "5a3cde19f9390c1c4d51324eb5e428f9c2753dde0a565d630660eae2956ea404",
+      "characters": 1422
+    },
+    {
+      "activityId": "dongdae-2025",
+      "documentId": "document-2",
+      "title": "하이쿠俳句를 쓰자",
+      "kind": "poem",
+      "extent": "full",
+      "startLine": 188,
+      "endLine": 265,
+      "sha256": "e23e8110bbbdb21dea500496c2b440325fa428a9321bb028783258d747e7d66b",
+      "characters": 1627
+    },
+    {
+      "activityId": "dongdae-2025",
+      "documentId": "document-3",
+      "title": "무덤덤한 무덤은 덤",
+      "kind": "play",
+      "extent": "full",
+      "startLine": 271,
+      "endLine": 656,
+      "sha256": "533de10a6d50e58ef3adfa0aa07fe97520c81c97077dbd1248d40b75c6e61154",
+      "characters": 8520
+    },
+    {
+      "activityId": "dongdae-2025",
+      "documentId": "document-4",
+      "title": "시 부문 심사평",
+      "kind": "review",
+      "extent": "full",
+      "startLine": 658,
+      "endLine": 671,
+      "sha256": "39a09fbc2a0109a26caf07340cd3f1bfa34290249380419c0577cc60abebc16d",
+      "characters": 1813
+    },
+    {
+      "activityId": "dongdae-2025",
+      "documentId": "document-5",
+      "title": "희곡·시나리오 부문 심사평",
+      "kind": "review",
+      "extent": "full",
+      "startLine": 673,
+      "endLine": 683,
+      "sha256": "b43750f41653401435d48efc3c0f0fd4d87f542d1c92963f3b01ee8e9ddc6b75",
+      "characters": 1661
+    },
+    {
+      "activityId": "yoon-dongju-24",
+      "documentId": "document-1",
+      "title": "반장갑",
+      "kind": "poem",
+      "extent": "full",
+      "startLine": 716,
+      "endLine": 785,
+      "sha256": "5fbca04585108b7aecc15da74330365025cb10803365bd50d51dff21505fc299",
+      "characters": 930
+    },
+    {
+      "activityId": "yoon-dongju-24",
+      "documentId": "document-2",
+      "title": "한밤의 벌초",
+      "kind": "poem",
+      "extent": "full",
+      "startLine": 791,
+      "endLine": 859,
+      "sha256": "e0fe076571b27a0ffb42be522dd96ff3fe1b6ca0da9eb7978d97da8b5c62e9db",
+      "characters": 942
+    },
+    {
+      "activityId": "yoon-dongju-24",
+      "documentId": "document-3",
+      "title": "슬픔의 슬픔",
+      "kind": "poem",
+      "extent": "full",
+      "startLine": 865,
+      "endLine": 904,
+      "sha256": "19485e1a7d1817d8a5b29683ff58231ad45ee7de3f920bf5881bc983967832cc",
+      "characters": 1121
+    },
+    {
+      "activityId": "yoon-dongju-24",
+      "documentId": "document-4",
+      "title": "간판 없는 거리",
+      "kind": "poem",
+      "extent": "full",
+      "startLine": 910,
+      "endLine": 948,
+      "sha256": "a7717db7b8c343decca95284498d860ce84a332906a422b1a3104678425b2f38",
+      "characters": 865
+    },
+    {
+      "activityId": "yoon-dongju-24",
+      "documentId": "document-5",
+      "title": "아무 말도 하지 않았다",
+      "kind": "poem",
+      "extent": "full",
+      "startLine": 954,
+      "endLine": 1019,
+      "sha256": "9f0196913ecb8f16805ae3437299be52ec528e00e29b457056ec3e4441fb2777",
+      "characters": 1199
+    },
+    {
+      "activityId": "yoon-dongju-24",
+      "documentId": "document-6",
+      "title": "제24회 윤동주 시문학상 당선 소감",
+      "kind": "speech",
+      "extent": "full",
+      "startLine": 1021,
+      "endLine": 1062,
+      "sha256": "913ab91e8d881d06cfee89845788aab46ffe5304930903e2a38fa02afedaebae",
+      "characters": 2061
+    },
+    {
+      "activityId": "garam-2024",
+      "documentId": "document-1",
+      "title": "다게레오타이프 daguerreotype",
+      "kind": "poem",
+      "extent": "full",
+      "startLine": 1101,
+      "endLine": 1153,
+      "sha256": "b748951711039de22e17e7fae4761367b940aeebb294e23a62b362434959a891",
+      "characters": 742
+    },
+    {
+      "activityId": "garam-2024",
+      "documentId": "document-2",
+      "title": "올봄은 머리를 싹둑 잘랐습니다",
+      "kind": "speech",
+      "extent": "full",
+      "startLine": 1159,
+      "endLine": 1187,
+      "sha256": "a956cb809c88835c4be722195394386b22dd6c1326c2c0597373582ceb26a97a",
+      "characters": 838
+    },
+    {
+      "activityId": "garam-2024",
+      "documentId": "document-3",
+      "title": "탄탄한 철학적 사유로 새로운 시적 인식을 드러내는 작품 선정",
+      "kind": "review",
+      "extent": "full",
+      "startLine": 1193,
+      "endLine": 1229,
+      "sha256": "4b8d61a42e091a8d8c9eca85c173cd879a59019c824960c5c45de83d3688034f",
+      "characters": 1668
+    },
+    {
+      "activityId": "pearl-buck-2024",
+      "documentId": "document-1",
+      "title": "나침반을 쥐고서",
+      "kind": "poem",
+      "extent": "full",
+      "startLine": 1263,
+      "endLine": 1310,
+      "sha256": "9146b1eced05e76774792192e290e5596d5adfc939d1c027da02119227b0a370",
+      "characters": 780
+    },
+    {
+      "activityId": "pearl-buck-2024",
+      "documentId": "document-2",
+      "title": "화요일의 무화과",
+      "kind": "poem",
+      "extent": "full",
+      "startLine": 1312,
+      "endLine": 1343,
+      "sha256": "4fa85fee80b7fe1611a59f9e632b87da2f3585080b817ba1bb9e042beed8e7e0",
+      "characters": 772
+    },
+    {
+      "activityId": "pearl-buck-2024",
+      "documentId": "document-3",
+      "title": "프레의 말",
+      "kind": "poem",
+      "extent": "full",
+      "startLine": 1345,
+      "endLine": 1379,
+      "sha256": "e3a5fcfc3fd71d0620d0088bda93de66dd16a4cd7be8cdf2875b2ab523e8d3cb",
+      "characters": 790
+    },
+    {
+      "activityId": "pearl-buck-2024",
+      "documentId": "document-4",
+      "title": "펄벅 문학상 심사를 마치고",
+      "kind": "review",
+      "extent": "general",
+      "startLine": 1385,
+      "endLine": 1417,
+      "sha256": "627b7a900cb2f6b7cb9ba2d46e9714cd4766022e8ffd95f5dbe89b3c0b7f9f22",
+      "characters": 1254
+    },
+    {
+      "activityId": "uihyeol-2023",
+      "documentId": "document-1",
+      "title": "가자 지구",
+      "kind": "poem",
+      "extent": "full",
+      "startLine": 1452,
+      "endLine": 1497,
+      "sha256": "3f6a379f39dfa7341fdd456b1553f01101139c8dd293871573385fc9b16a6564",
+      "characters": 786
+    },
+    {
+      "activityId": "uihyeol-2023",
+      "documentId": "document-2",
+      "title": "선명하게 보고 표현하는 힘",
+      "kind": "review",
+      "extent": "full",
+      "startLine": 1503,
+      "endLine": 1539,
+      "sha256": "e3a254b1eab4b492f8a88c7bd500eec1170112c3f37247aa581d11d315a115b0",
+      "characters": 1871
+    },
+    {
+      "activityId": "uihyeol-2023",
+      "documentId": "document-3",
+      "title": "결코, 멀지, 않은 — 수상소감·인터뷰",
+      "kind": "interview",
+      "extent": "full",
+      "startLine": 1545,
+      "endLine": 1597,
+      "sha256": "2645a8dfbc35f0d299cc89996c75c6d0d9f2f02c84157dfcd8c3bff00250516b",
+      "characters": 1584
+    },
+    {
+      "activityId": "keimyung-2021",
+      "documentId": "document-1",
+      "title": "아기 엄마",
+      "kind": "poem",
+      "extent": "reprint",
+      "startLine": 1670,
+      "endLine": 1677,
+      "sha256": "8b66aa10f8ff57d38beb2d7ad90d43192578a37db6210aa3e4c2d4eb597665a6",
+      "characters": 1174
+    },
+    {
+      "activityId": "keimyung-2021",
+      "documentId": "document-2",
+      "title": "당선소감",
+      "kind": "speech",
+      "extent": "full",
+      "startLine": 1683,
+      "endLine": 1705,
+      "sha256": "d025308b5a61f6248c91c829a7eeefc6742bc270ecfc6095599bf54d63255d6a",
+      "characters": 805
+    },
+    {
+      "activityId": "keimyung-2021",
+      "documentId": "document-3",
+      "title": "시 부문 심사평 및 심사위원 소개",
+      "kind": "review",
+      "extent": "full",
+      "startLine": 1711,
+      "endLine": 1753,
+      "sha256": "2df6bb659855441a2c85f5d83f958612cf01d124b066d16573b243acd83f1c34",
+      "characters": 2077
+    },
+    {
+      "activityId": "gyeongnam-2022",
+      "documentId": "document-1",
+      "title": "수상소감",
+      "kind": "speech",
+      "extent": "full",
+      "startLine": 1784,
+      "endLine": 1790,
+      "sha256": "8ca9c4ca92c0a985a0a706d94340d84bfc6b589a3aab12a29fd8118b908211c7",
+      "characters": 340
+    },
+    {
+      "activityId": "gyeongnam-2022",
+      "documentId": "document-2",
+      "title": "증류수를 한 잔 마시면 일어나는 일",
+      "kind": "poem",
+      "extent": "excerpt",
+      "startLine": 1792,
+      "endLine": 1814,
+      "sha256": "beb30c895981049ac1c2ab41f1ebc99d3564d120d8066aeeeb9edc92f605e966",
+      "characters": 352
+    },
+    {
+      "activityId": "jeonju-2022",
+      "documentId": "document-1",
+      "title": "키친 드링커",
+      "kind": "poem",
+      "extent": "full",
+      "startLine": 1853,
+      "endLine": 2056,
+      "sha256": "37aee72d6e9b6938989d5a0b9e769d7cf9b51fc909891418f3095a145088a180",
+      "characters": 1127
+    },
+    {
+      "activityId": "jeonju-2022",
+      "documentId": "document-2",
+      "title": "수상소감",
+      "kind": "speech",
+      "extent": "full",
+      "startLine": 2058,
+      "endLine": 2068,
+      "sha256": "e9fcdcf1361a408e2873f977d31d24f3d5f5d96bea97fe93210cc2da39990319",
+      "characters": 830
+    }
+  ],
+  "excluded": [
+    "공모요강·발표 명단·상장·사진 설명",
+    "타인 작품과 합본 중복 지면",
+    "자료 수집 안내·목록·검수 기록"
+  ],
+  "limitations": [
+    "아기 엄마: 공식 지면과 대조하지 않은 전재본",
+    "증류수를 한 잔 마시면 일어나는 일: 일부만 수록",
+    "의정부 심사평과 전주 선정 이유: 파일에 본문이 없어 링크만 유지"
+  ]
+}
