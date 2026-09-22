@@ -11,6 +11,8 @@
 <meta name="theme-color" content="#002fa8">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect x='2' y='11' width='12' height='3' fill='%23002fa8'/%3E%3C/svg%3E">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="stylesheet" href="assets/editor/rich-text.css?v=2">
+<script src="assets/editor/rich-render.js?v=2"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Noto+Serif+KR:wght@300;400;600&display=swap" rel="stylesheet">
@@ -639,6 +641,9 @@ function renderList(s){
 }
 
 function bodyHtml(w){
+  if(w.rich && window.PortfolioText){
+    try { return `<div class="w-body rich-body">${PortfolioText.renderRich(w.rich)}</div>`; } catch {}
+  }
   if(w.section === "poem")
     return `<div class="w-body poem">${esc(w.body)}</div>`;
   const ps = w.body.split(/\n{2,}/)
