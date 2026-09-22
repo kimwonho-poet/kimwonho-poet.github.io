@@ -14,6 +14,7 @@ const clone = value => structuredClone(value);
 const today = () => new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Seoul', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date());
 const newPost = () => ({ id: 'w-' + crypto.randomUUID(), section: 'poem', title: '', body: '', date: today(), meta: '', link: '', note: '' });
 const item = value => typeof value === 'string' ? { t: value, url: '', img: '' } : value;
+const activityTools = window.PortfolioActivities;
 const hasDrafts = () => Object.keys(state.drafts.posts || {}).length || state.drafts.about || state.drafts.profile;
 let noticeTimer;
 
@@ -175,15 +176,37 @@ function profileView() {
     </form>${statusLine()}</section>`;
 }
 function aboutView() {
+  if (state.activity && currentActivity()) return activityEditor();
   const a = state.drafts.about || state.content.about;
   return `<section class="single-panel">${header('소개·이력')}<form id="about-form" class="form"><h2 class="section-title">기본 정보</h2>
     ${a.facts.map((f, i) => `<div class="repeat-row">${field('항목', f.k, `facts.${i}.k`)}${field('내용', f.v, `facts.${i}.v`)}${arrayControls('facts', i, a.facts.length)}</div>`).join('')}
     <button class="quiet" data-action="add:facts" type="button">${icon('plus')}기본 정보 추가</button><h2 class="section-title">이력</h2>
     ${a.groups.map((g, gi) => `<section class="about-group"><div class="group-heading">${field('연도·묶음 이름', g.h, `groups.${gi}.h`)}${arrayControls('groups', gi, a.groups.length)}</div>
       ${g.items.map((raw, i) => { const it = item(raw); return `<div class="group-item"><div class="repeat-row"><label>항목<textarea data-path="groups.${gi}.items.${i}.t" rows="2">${esc(it.t)}</textarea></label>${arrayControls(`groups.${gi}.items`, i, g.items.length)}</div>
-        <div class="form-row">${field('관련 홈페이지', it.url, `groups.${gi}.items.${i}.url`, 'url')}${imageField(it.img, `groups.${gi}.items.${i}.img`)}</div></div>`; }).join('')}
+        <div class="form-row">${field('관련 홈페이지', it.url, `groups.${gi}.items.${i}.url`, 'url')}${imageField(it.img, `groups.${gi}.items.${i}.img`)}</div><button type="button" class="quiet" data-action="activity:${gi}:${i}">${icon('file-text')}상세 페이지 편집</button></div>`; }).join('')}
       <button class="quiet" data-action="add:groups.${gi}.items" type="button">${icon('plus')}이력 항목 추가</button></section>`).join('')}
     <button class="quiet" data-action="add:groups" type="button">${icon('plus')}연도·묶음 추가</button></form>${statusLine()}</section>`;
+}
+function currentActivity() {
+  const a = state.drafts.about || state.content.about;
+  for (let gi = 0; gi < a.groups.length; gi++) {
+    const i = a.groups[gi].items.findIndex(raw => activityTools.activityId(item(raw)) === state.activity);
+    if (i >= 0) return { value: a.groups[gi].items[i], group: a.groups[gi].h, path: `groups.${gi}.items.${i}` };
+  }
+  return null;
+}
+function activityEditor() {
+  const current = currentActivity(), it = current.value, detail = it.detail || activityTools.emptyDetail(), path = current.path + '.detail';
+  const doc = detail.documents.find(d => d.id === state.activityDoc) || detail.documents[0];
+  state.activityDoc = doc?.id;
+  const index = detail.documents.indexOf(doc), docPath = `${path}.documents.${index}`;
+  const select = (label, key, options, value) => `<label>${label}<select data-path="${key}">${Object.entries(options).map(([k,v]) => `<option value="${k}" ${k === value ? 'selected' : ''}>${v}</option>`).join('')}</select></label>`;
+  return `<section class="single-panel activity-editor">${header('상세 페이지')}<div class="activity-editor-nav"><button class="quiet" type="button" data-action="activity-back">${icon('arrow-left')}소개·이력</button><button class="quiet" type="button" data-action="activity-preview">${icon(state.preview ? 'pencil' : 'eye')}${state.preview ? '계속 편집' : '미리보기'}</button><a class="published-link" href="${publicOrigin}/#/about/${encodeURIComponent(state.activity)}" target="_blank" rel="noopener">게시된 페이지 보기</a></div><h2 class="activity-editor-title">${esc(it.t)}</h2>
+    ${state.preview ? `<div class="activity-preview">${activityTools.renderActivityContents({ ...it, group: current.group })}</div>` : `
+      <details class="activity-settings" ${!detail.documents.length ? 'open' : ''}><summary>기본 정보와 관련 링크</summary><form class="form"><div class="form-row">${field('연도', detail.year, `${path}.year`)}${field('수상·활동 구분', detail.distinction, `${path}.distinction`)}</div><label>소개<textarea rows="4" data-path="${path}.summary">${esc(detail.summary)}</textarea></label>${detail.sources.map((s,i) => `<div class="repeat-row">${field('출처 이름', s.label, `${path}.sources.${i}.label`)}${field('주소', s.url, `${path}.sources.${i}.url`, 'url')}${arrayControls(`${path}.sources`, i, detail.sources.length)}</div>`).join('')}<button type="button" class="quiet" data-action="add:${path}.sources">${icon('plus')}출처 추가</button></form></details>
+      <div class="activity-doc-picker"><label>자료 선택<select id="activity-document">${detail.documents.map(d => `<option value="${esc(d.id)}" ${d.id === doc?.id ? 'selected' : ''}>${esc(activityTools.documentKinds[d.kind])} · ${esc(d.title || '제목 없는 자료')}</option>`).join('')}</select></label><button type="button" class="quiet" data-action="activity-add">${icon('plus')}자료 추가</button>${doc ? arrayControls(`${path}.documents`, index, detail.documents.length) : ''}</div>
+      ${doc ? `<form class="form activity-document-fields"><div class="form-row">${select('자료 종류', `${docPath}.kind`, activityTools.documentKinds, doc.kind)}${select('수록 범위', `${docPath}.extent`, activityTools.documentExtents, doc.extent)}</div>${field('자료 제목', doc.title, `${docPath}.title`)}<label>자료 안내<textarea rows="2" data-path="${docPath}.note">${esc(doc.note)}</textarea></label><div class="form-row">${field('출처', doc.source, `${docPath}.source`)}${field('원문 주소', doc.url, `${docPath}.url`, 'url')}</div></form>${toolbar()}<form class="form writing-sheet" id="activity-body-form"><div id="composer"></div><div class="writing-bottom"><span id="word-count">${doc.body.length.toLocaleString()}자</span></div></form>` : '<p class="empty">등록된 자료가 없습니다.</p>'}
+    `}${statusLine()}</section>`;
 }
 function render() {
   composer?.destroy(); composer = null;
@@ -191,10 +214,14 @@ function render() {
   document.body.classList.toggle('writing-focus', state.focus && state.tab === 'works');
   main.querySelectorAll('form').forEach(f => f.addEventListener('submit', e => e.preventDefault()));
   if (document.getElementById('composer')) {
-    composer = createComposer(document.getElementById('composer'), state.post.rich || plainDoc(state.post.body), rich => {
-      state.post.rich = rich; state.post.body = plainText(rich); draft('works', state.post);
-      document.getElementById('word-count').textContent = state.post.body.length.toLocaleString() + '자';
-      document.getElementById('posts').innerHTML = postList();
+    const content = state.tab === 'about' ? currentActivity().value.detail.documents.find(d => d.id === state.activityDoc) : state.post;
+    composer = createComposer(document.getElementById('composer'), content.rich || plainDoc(content.body), rich => {
+      if (state.tab === 'about') ensureDraft();
+      const edited = state.tab === 'about' ? currentActivity().value.detail.documents.find(d => d.id === state.activityDoc) : state.post;
+      edited.rich = rich; edited.body = plainText(rich);
+      draft(state.tab, state.tab === 'about' ? state.drafts.about : edited);
+      document.getElementById('word-count').textContent = edited.body.length.toLocaleString() + '자';
+      if (state.tab === 'works') document.getElementById('posts').innerHTML = postList();
     }, updateToolbar, insertImages);
     updateToolbar();
   }
@@ -406,6 +433,10 @@ main.addEventListener('input', e => {
   }
 });
 main.addEventListener('change', e => {
+  if (e.target.id === 'activity-document') { state.activityDoc = e.target.value; render(); return; }
+  if (e.target.dataset.path && e.target.tagName === 'SELECT') {
+    const value = ensureDraft(); setPath(value, e.target.dataset.path, e.target.value); draft(state.tab, value); return;
+  }
   if (e.target.id === 'remember') { document.getElementById('login-link').href = '/api/editor?action=login&remember=' + (e.target.checked ? '1' : '0'); return; }
   if (e.target.id === 'text-style' && composer) {
     const value = e.target.value;
@@ -439,6 +470,17 @@ main.addEventListener('click', async e => {
   }
   const action = el.dataset.action;
   if (!action) return;
+  if (action.startsWith('activity:')) {
+    const [, gi, i] = action.split(':'); const a = ensureDraft(); const it = a.groups[gi].items[i];
+    it.id ||= activityTools.activityId(it); it.detail ||= activityTools.emptyDetail();
+    state.activity = it.id; state.activityDoc = null; state.preview = false; draft('about', a); render(); window.scrollTo(0, 0); return;
+  }
+  if (action === 'activity-back') { state.activity = null; state.activityDoc = null; state.preview = false; render(); window.scrollTo(0, 0); return; }
+  if (action === 'activity-preview') { state.preview = !state.preview; render(); window.scrollTo(0, 0); return; }
+  if (action === 'activity-add') {
+    const a = ensureDraft(), it = currentActivity().value; const doc = { id: 'document-' + crypto.randomUUID(), kind: 'poem', extent: 'full', title: '', body: '', note: '', source: '', url: '' };
+    it.detail.documents.push(doc); state.activityDoc = doc.id; draft('about', a); render(); return;
+  }
   if (action === 'new') { state.post = newPost(); state.preview = false; state.listOpen = false; render(); main.querySelector('[name=title]')?.focus(); return; }
   if (action === 'toggle-list') { state.listOpen = !state.listOpen; document.querySelector('.work-layout').classList.toggle('list-open', state.listOpen); return; }
   if (action === 'focus') { state.focus = !state.focus; document.querySelector('.work-layout').classList.toggle('focus-mode', state.focus); document.body.classList.toggle('writing-focus', state.focus); el.innerHTML = icon(state.focus ? 'minimize-2' : 'maximize-2'); return; }
@@ -463,8 +505,9 @@ main.addEventListener('click', async e => {
   }
   const value = ensureDraft(), list = valueAt(value, path), index = Number(rawIndex);
   if (kind === 'add') {
-    list.push(path === 'facts' ? { k: '', v: '' } : path === 'groups' ? { h: '', items: [] } : path === 'links' ? { label: '', url: '', icon: 'blog' } : { t: '', url: '', img: '' });
+    list.push(path === 'facts' ? { k: '', v: '' } : path === 'groups' ? { h: '', items: [] } : path === 'links' ? { label: '', url: '', icon: 'blog' } : path.endsWith('.sources') ? { label: '', url: '' } : { id: 'activity-' + crypto.randomUUID(), t: '', url: '', img: '', detail: activityTools.emptyDetail() });
   } else if (kind === 'remove') {
+    if (path.endsWith('.documents') && !confirm('이 자료를 상세 페이지에서 삭제할까요? 저장 후 게시해야 홈페이지에 반영됩니다.')) return;
     if (path === 'groups' && list[index].items.length && !confirm('이 묶음의 이력 항목도 함께 삭제할까요? 저장 후 게시해야 홈페이지에 반영됩니다.')) return;
     list.splice(index, 1);
   } else if (kind === 'up' && index > 0) [list[index - 1], list[index]] = [list[index], list[index - 1]];

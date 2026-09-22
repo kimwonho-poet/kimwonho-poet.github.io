@@ -91,7 +91,7 @@ function mount() {
     target.focus({ preventScroll: true });
     target.scrollIntoView({ behavior: reduced() ? 'instant' : 'smooth', block: 'center' });
   }, options);
-  const restoredImages = storedValid ? blocks().slice(0, stored.block + 1).flatMap(block => [...block.querySelectorAll('img')]) : [];
+  const restoredImages = storedValid && !article.dataset.startAt ? blocks().slice(0, stored.block + 1).flatMap(block => [...block.querySelectorAll('img')]) : [];
   for (const img of restoredImages) {
     img.loading = 'eager';
     img.addEventListener('load', () => { if (!restoring && !touched && article.isConnected) move(stored); }, options);
@@ -101,7 +101,9 @@ function mount() {
   }));
   Promise.race([Promise.all([document.fonts?.ready, ...imageReady]), new Promise(resolve => setTimeout(resolve, 1800))]).then(() => requestAnimationFrame(() => {
     if (!article.isConnected || controller.signal.aborted) return;
-    if (storedValid && !touched && blocks()[stored.block]) { move(stored); banner.hidden = false; }
+    const start = article.dataset.startAt && document.getElementById(article.dataset.startAt);
+    if (start && !touched) { start.scrollIntoView({ block: 'start', behavior: 'instant' }); start.focus({ preventScroll: true }); }
+    else if (storedValid && !touched && blocks()[stored.block]) { move(stored); banner.hidden = false; }
     restoring = false;
   }));
   dispose = () => {

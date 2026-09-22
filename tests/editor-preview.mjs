@@ -36,7 +36,7 @@ createServer(async (req, res) => {
       json(200, { sha: hash(), ...readContent(html) }); return;
     }
     const path = url.pathname === '/' ? '/index.html' : url.pathname;
-    if (!['/index.html', '/admin.html', '/editor-config.json', '/profile.jpg', '/field.png', '/apple-touch-icon.png'].includes(path) && !/^\/assets\/(?:editor|home-motion|reader)\/[a-z0-9.-]+$/.test(path)) { res.writeHead(404).end(); return; }
+    if (!['/index.html', '/admin.html', '/editor-config.json', '/profile.jpg', '/field.png', '/apple-touch-icon.png'].includes(path) && !/^\/assets\/(?:editor|home-motion|reader|activities)\/[a-z0-9.-]+$/.test(path)) { res.writeHead(404).end(); return; }
     const body = path === '/index.html' ? html : await readFile(resolve(root, '.' + path));
     res.writeHead(200, { 'Content-Type': types[path.split('.').at(-1)], 'Cache-Control': 'no-store' }); res.end(body);
   } catch (e) { json(e.status || 500, { message: e.message }); }
