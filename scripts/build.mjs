@@ -4,6 +4,7 @@ import { build } from 'esbuild';
 await build({ entryPoints: ['assets/editor/composer.js'], bundle: true, format: 'esm', minify: true, outfile: 'assets/editor/composer.bundle.js', target: ['safari16', 'chrome110'] });
 await build({ entryPoints: ['lib/rich-text.mjs'], bundle: true, format: 'iife', globalName: 'PortfolioText', minify: true, outfile: 'assets/editor/rich-render.js', target: ['safari16', 'chrome110'] });
 await build({ entryPoints: ['assets/reader/reader.js'], bundle: true, format: 'iife', minify: true, outfile: 'assets/reader/reader.bundle.js', target: ['safari16', 'chrome110'] });
+await build({ entryPoints: ['lib/activities.mjs'], bundle: true, format: 'iife', globalName: 'PortfolioActivities', minify: true, outfile: 'assets/activities/activity-render.js', target: ['safari16', 'chrome110'] });
 
 await rm('public', { recursive: true, force: true });
 await mkdir('public', { recursive: true });
