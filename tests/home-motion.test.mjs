@@ -53,10 +53,17 @@ function fixture({ reduced = false, fail = false, delayed = false, storageThrows
 }
 const flush = () => new Promise(resolve => setImmediate(resolve));
 
-test("existing public content and editor remain unchanged", () => {
+test("existing biography labels, links, images, works, profile and legacy editor remain unchanged", () => {
   const original = execFileSync("git", ["show", "0a27c2d4b37fd27dc0a70672b9c9a6fc9522877e:index.html"], { cwd: root, encoding: "utf8" });
   const content = source => {
     const data = readContent(source);
+    data.about.groups.forEach(group => {
+      group.items = group.items.map(item => {
+        if (typeof item === 'string') return item;
+        const { id, detail, ...originalFields } = item;
+        return originalFields;
+      });
+    });
     for (const section of ["works", "about", "profile"]) source = replaceContent(source, section, data[section]);
     return source.slice(source.indexOf("const SITE ="), source.indexOf("const SEC ="));
   };
