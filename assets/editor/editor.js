@@ -143,7 +143,7 @@ function postPreview() {
 }
 function toolbar() {
   const tool = (command, name, label) => `<button type="button" data-format="${command}" title="${label}" aria-label="${label}" aria-pressed="false">${icon(name)}</button>`;
-  return `<div class="format-toolbar" role="toolbar" aria-label="본문 서식"><select id="text-style" aria-label="문단 스타일"><option value="p">본문</option><option value="h2">소제목 1</option><option value="h3">소제목 2</option></select><span class="tool-group">${tool('bold','bold','굵게')}${tool('italic','italic','기울임')}${tool('underline','underline','밑줄')}${tool('strike','strikethrough','취소선')}</span><span class="tool-group">${tool('left','align-left','왼쪽 정렬')}${tool('center','align-center','가운데 정렬')}${tool('right','align-right','오른쪽 정렬')}</span><span class="tool-group">${tool('blockquote','quote','인용')}${tool('bulletList','list','글머리 목록')}${tool('orderedList','list-ordered','번호 목록')}${tool('horizontalRule','minus','구분선')}</span><span class="tool-group">${tool('link','link','링크')}${tool('image','image','사진 넣기')}</span><span class="tool-group">${tool('undo','undo-2','실행 취소')}${tool('redo','redo-2','다시 실행')}</span></div>`;
+  return `<div class="format-toolbar" role="toolbar" aria-label="본문 서식"><select id="text-style" aria-label="문단 스타일"><option value="p">본문</option><option value="h2">소제목 1</option><option value="h3">소제목 2</option></select><span class="tool-group">${tool('bold','bold','굵게')}${tool('italic','italic','기울임')}${tool('underline','underline','밑줄')}${tool('strike','strikethrough','취소선')}</span><span class="tool-group">${tool('left','align-left','왼쪽 정렬')}${tool('center','align-center','가운데 정렬')}${tool('right','align-right','오른쪽 정렬')}</span><span class="tool-group">${tool('blockquote','quote','인용')}${tool('bulletList','list','글머리 목록')}${tool('orderedList','list-ordered','번호 목록')}${tool('horizontalRule','minus','구분선')}</span><span class="tool-group">${tool('footnote','superscript','각주')}${tool('link','link','링크')}${tool('image','image','사진 넣기')}</span><span class="tool-group">${tool('undo','undo-2','실행 취소')}${tool('redo','redo-2','다시 실행')}</span></div>`;
 }
 function worksView() {
   const w = state.post;
@@ -254,6 +254,15 @@ async function insertImages(files, alt = '') {
 }
 function format(command) {
   if (!composer) return;
+  if (command === 'footnote') {
+    const selected = composer.isActive('footnote');
+    dialog(selected ? '각주 수정' : '각주 넣기', `<label>각주 내용<textarea name="text" rows="5" maxlength="5000" required>${esc(selected ? composer.getAttributes('footnote').text : '')}</textarea></label>`, '적용', values => {
+      const text = values.get('text').trim();
+      if (!text) throw new Error('각주 내용을 입력해 주세요.');
+      if (selected) composer.chain().focus().updateAttributes('footnote', { text }).run();
+      else composer.chain().focus().insertContent({ type: 'footnote', attrs: { text } }).run();
+    }); return;
+  }
   if (command === 'image') {
     dialog('사진 넣기', '<label>사진 파일<input name="photos" type="file" accept="image/jpeg,image/png,image/webp,image/gif" multiple></label><span class="or-divider">또는</span><label>사진 주소<input name="src" type="url" placeholder="https://"></label><label>사진 설명<input name="alt" maxlength="500"></label>', '사진 넣기', async values => {
       const files = values.getAll('photos').filter(f => f.size);
@@ -413,6 +422,13 @@ main.addEventListener('keydown', e => {
   state.tab = tabs[next].dataset.tab; state.preview = false; render(); main.querySelectorAll('[role=tab]')[next].focus();
 });
 main.addEventListener('click', async e => {
+  const note = e.target.closest('[data-note-target]');
+  if (note) {
+    e.preventDefault();
+    const target = document.getElementById(note.dataset.noteTarget);
+    target?.focus({ preventScroll: true }); target?.scrollIntoView({ block: 'center', behavior: 'instant' });
+    return;
+  }
   const el = e.target.closest('button');
   if (!el || state.busy) return;
   if (el.dataset.format) { format(el.dataset.format); return; }
