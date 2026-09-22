@@ -1,9 +1,16 @@
-import { Editor } from '@tiptap/core';
+import { Editor, Node } from '@tiptap/core';
 import StarterKit from '@tiptap/starter-kit';
 import Image from '@tiptap/extension-image';
 import TextAlign from '@tiptap/extension-text-align';
 import Placeholder from '@tiptap/extension-placeholder';
 export { renderRich, plainDoc, plainText } from '../../lib/rich-text.mjs';
+
+const Footnote = Node.create({
+  name: 'footnote', group: 'inline', inline: true, atom: true,
+  addAttributes() { return { text: { default: '', parseHTML: element => element.dataset.noteText } }; },
+  parseHTML() { return [{ tag: 'span[data-footnote]' }]; },
+  renderHTML({ node }) { return ['span', { 'data-footnote': '', 'data-note-text': node.attrs.text, title: node.attrs.text, class: 'editor-footnote' }, '[주]']; }
+});
 
 export function createComposer(element, content, onUpdate, onSelection, onFiles) {
   return new Editor({
@@ -11,6 +18,7 @@ export function createComposer(element, content, onUpdate, onSelection, onFiles)
     extensions: [
       StarterKit.configure({ heading: { levels: [2, 3] }, code: false, codeBlock: false, trailingNode: false, link: { openOnClick: false, autolink: true, protocols: ['https', 'http', 'mailto'] } }),
       Image.configure({ allowBase64: true }), TextAlign.configure({ types: ['heading', 'paragraph'], alignments: ['left', 'center', 'right'] }),
+      Footnote,
       Placeholder.configure({ placeholder: '여기에서 글을 시작하세요.' })
     ],
     editorProps: {
