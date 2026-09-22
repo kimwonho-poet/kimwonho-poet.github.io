@@ -5,6 +5,7 @@ import { createHash } from 'node:crypto';
 import { EncryptJWT, jwtDecrypt } from 'jose';
 import { readContent, replaceContent, validateContent } from '../lib/content.mjs';
 import { createEditorHandler } from '../api/editor.mjs';
+import { plainDoc, plainText, renderRich, validateRich } from '../lib/rich-text.mjs';
 
 const html = readFileSync(new URL('../index.html', import.meta.url), 'utf8');
 const data = readContent(html);
@@ -136,4 +137,65 @@ test('complete OAuth handshake permits only owner and repository writers', async
 test('logout expires the session cookie', async () => {
   const r = await request({ action: 'logout', method: 'POST', cookie: await session(), headers: { origin: env.EDITOR_ORIGIN, 'x-csrf-token': 'test-csrf' } });
   assert.equal(r.statusCode, 200); assert.match(r.headers['set-cookie'], /Max-Age=0/);
+});
+
+test('remembered login issues a 30-day HttpOnly cookie with encrypted refresh credentials', async () => {
+  const base = githubMock();
+  const fetcher = async (url, options) => url.endsWith('/login/oauth/access_token') ? Response.json({ access_token: 'access-secret', refresh_token: 'refresh-secret', expires_in: 28800, refresh_token_expires_in: 15897600 }) : base.fetcher(url, options);
+  for (const remember of [0, 1]) {
+    const handler = createEditorHandler(env, fetcher);
+    const first = await request({ action: 'login&remember=' + remember, handler });
+    const flow = first.headers['set-cookie'].split(';')[0];
+    const { payload } = await jwtDecrypt(flow.split('=')[1], key);
+    const result = await request({ action: `callback&state=${payload.state}&code=test-code`, headers: { cookie: flow }, handler });
+    const cookie = result.headers['set-cookie'][1];
+    const token = cookie.split(';')[0].split('=')[1];
+    const sessionValue = (await jwtDecrypt(token, key)).payload;
+    assert.equal(sessionValue.remember, !!remember);
+    assert.ok(!cookie.includes('refresh-secret'));
+    if (remember) { assert.match(cookie, /Max-Age=2592000/); assert.equal(sessionValue.refreshToken, 'refresh-secret'); }
+    else { assert.ok(!cookie.includes('Max-Age')); assert.ok(!sessionValue.refreshToken); }
+  }
+});
+
+test('expired access token refreshes once for concurrent requests without extending the 30-day limit', async () => {
+  const now = Math.floor(Date.now() / 1000), until = now + 20 * 86400;
+  const cookie = await session({ remember: true, refreshToken: 'old-refresh', accessUntil: now - 1, refreshUntil: now + 10000000, until }, '20d');
+  let refreshes = 0;
+  const base = githubMock();
+  const handler = createEditorHandler(env, async (url, options) => {
+    if (url.endsWith('/login/oauth/access_token')) { refreshes++; const input = JSON.parse(options.body); assert.equal(input.grant_type, 'refresh_token'); return Response.json({ access_token: 'new-access', refresh_token: 'new-refresh', expires_in: 28800, refresh_token_expires_in: 15897600 }); }
+    return base.fetcher(url, options);
+  });
+  const a = await request({ cookie, handler });
+  const b = await request({ action: 'content', cookie, handler });
+  assert.equal(a.json.authenticated, true); assert.equal(b.statusCode, 200); assert.equal(refreshes, 1);
+  assert.equal(a.json.expiresAt, until); assert.ok(!a.body.includes('new-refresh'));
+  const payload = (await jwtDecrypt(a.headers['set-cookie'][1].split(';')[0].split('=')[1], key)).payload;
+  assert.equal(payload.token, 'new-access'); assert.equal(payload.refreshToken, 'new-refresh'); assert.equal(payload.until, until);
+});
+
+test('refresh failure preserves a competing tab cookie and logout needs no refresh', async () => {
+  const now = Math.floor(Date.now() / 1000);
+  const cookie = await session({ remember: true, refreshToken: 'old', accessUntil: 1, refreshUntil: now + 100000, until: now + 10000 });
+  const handler = createEditorHandler(env, async () => Response.json({ error: 'bad_refresh_token' }));
+  const failure = await request({ cookie, handler });
+  assert.equal(failure.statusCode, 503); assert.equal(failure.headers['set-cookie'], undefined);
+  const logout = await request({ action: 'logout', method: 'POST', cookie, handler, headers: { origin: env.EDITOR_ORIGIN, 'x-csrf-token': 'test-csrf' } });
+  assert.equal(logout.statusCode, 200);
+  assert.match(logout.headers['set-cookie'], /Max-Age=0/);
+});
+
+test('rich documents preserve Korean line breaks and render only safe markup', () => {
+  const text = '첫 행\n둘째 행\n\n다음 연\n';
+  assert.equal(plainText(plainDoc(text)), text);
+  const doc = plainDoc(text);
+  doc.content[0].content[0].marks = [{ type: 'bold' }, { type: 'link', attrs: { href: 'https://example.com/?a=1&b=2' } }];
+  doc.content.push({ type: 'image', attrs: { src: 'data:image/png;base64,YQ==', alt: '<설명>' } });
+  const rendered = renderRich(doc);
+  assert.match(rendered, /<strong>첫 행<\/strong>/); assert.match(rendered, /&lt;설명&gt;/);
+  const updated = replaceContent(html, 'works', [{ ...post, rich: doc, body: plainText(doc) }]);
+  assert.deepEqual(readContent(updated).works[0].rich, doc);
+  for (const bad of [{ type: 'image', attrs: { src: 'javascript:alert(1)' } }, { type: 'script', content: [] }, { type: 'text', text: 'x', marks: [{ type: 'link', attrs: { href: 'data:text/html,x' } }] }]) assert.throws(() => validateRich({ type: 'doc', content: [bad] }));
+  assert.throws(() => replaceContent(html, 'works', [{ ...post, rich: doc }]));
 });

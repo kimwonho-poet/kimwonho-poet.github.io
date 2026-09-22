@@ -6,6 +6,7 @@ const REPO = 'kimwonho-poet/kimwonho-poet.github.io';
 const OWNER_ID = 301199413;
 const SESSION = '__Host-portfolio-session';
 const FLOW = '__Host-portfolio-flow';
+const REMEMBER_AGE = 30 * 86400;
 const random = () => randomBytes(32).toString('base64url');
 const error = (status, message) => Object.assign(new Error(message), { status });
 const equal = (a, b) => typeof a === 'string' && typeof b === 'string' && Buffer.byteLength(a) === Buffer.byteLength(b) && timingSafeEqual(Buffer.from(a), Buffer.from(b));
@@ -15,7 +16,7 @@ export function createEditorHandler(env = process.env, fetcher = fetch) {
   const configured = !!(origin?.startsWith('https://') && env.GITHUB_CLIENT_ID && env.GITHUB_CLIENT_SECRET && env.SESSION_SECRET?.length >= 32);
   const key = createHash('sha256').update(env.SESSION_SECRET || '').digest();
   const branch = 'main';
-  const cookie = (name, value, age) => `${name}=${value}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=${age}`;
+  const cookie = (name, value, age) => `${name}=${value}; Path=/; HttpOnly; Secure; SameSite=Lax${age === null ? '' : `; Max-Age=${age}`}`;
   const readCookie = (req, name) => (req.headers.cookie || '').split(';').map(x => x.trim()).find(x => x.startsWith(name + '='))?.slice(name.length + 1);
   const seal = (payload, type, age) => new EncryptJWT({ ...payload, kind: type }).setProtectedHeader({ alg: 'dir', enc: 'A256GCM' }).setIssuer(origin).setAudience('portfolio-editor').setIssuedAt().setExpirationTime(`${age}s`).encrypt(key);
   async function unseal(value, type) {
@@ -23,6 +24,39 @@ export function createEditorHandler(env = process.env, fetcher = fetch) {
       const { payload } = await jwtDecrypt(value, key, { issuer: origin, audience: 'portfolio-editor' });
       return payload.kind === type ? payload : null;
     } catch { return null; }
+  }
+  const refreshing = new Map();
+  const now = () => Math.floor(Date.now() / 1000);
+  async function setSession(res, payload) {
+    const age = Math.max(1, payload.until - now());
+    res.setHeader('Set-Cookie', [cookie(FLOW, '', 0), cookie(SESSION, await seal(payload, 'session', age), payload.remember ? age : null)]);
+  }
+  async function refreshSession(session, res) {
+    if (!session.refreshToken || session.accessUntil > now() + 120) return session;
+    if (session.until <= now() || session.refreshUntil <= now()) throw error(401, '로그인 유지 기간이 끝났습니다. 다시 로그인해 주세요.');
+    const fingerprint = createHash('sha256').update(session.refreshToken).digest('hex');
+    for (const [id, entry] of refreshing) if (entry.expires < Date.now()) refreshing.delete(id);
+    if (!refreshing.has(fingerprint)) {
+      const promise = (async () => {
+        const response = await fetcher('https://github.com/login/oauth/access_token', {
+          method: 'POST', headers: { Accept: 'application/json', 'Content-Type': 'application/json' }, signal: AbortSignal.timeout(15000),
+          body: JSON.stringify({ client_id: env.GITHUB_CLIENT_ID, client_secret: env.GITHUB_CLIENT_SECRET, grant_type: 'refresh_token', refresh_token: session.refreshToken })
+        });
+        const auth = await response.json();
+        if (!response.ok || !auth.access_token || !auth.refresh_token) {
+          // A competing tab may have rotated the token already. Do not erase its newer cookie.
+          throw error(503, '로그인 갱신을 완료하지 못했습니다. 잠시 후 다시 시도하거나 다시 로그인해 주세요. 초안은 보관됩니다.');
+        }
+        const user = await github('/user', auth.access_token);
+        const repo = await github(`/repos/${REPO}`, auth.access_token);
+        if (user.id !== OWNER_ID || !repo.permissions?.push) throw error(401, '관리자 권한을 확인할 수 없습니다.');
+        return { ...session, token: auth.access_token, refreshToken: auth.refresh_token, accessUntil: now() + Number(auth.expires_in || 28800), refreshUntil: now() + Number(auth.refresh_token_expires_in || 0) };
+      })();
+      refreshing.set(fingerprint, { promise, expires: Date.now() + 60000 });
+    }
+    const renewed = await refreshing.get(fingerprint).promise;
+    await setSession(res, renewed);
+    return renewed;
   }
   async function github(path, token, options = {}) {
     const response = await fetcher('https://api.github.com' + path, {
@@ -77,7 +111,8 @@ export function createEditorHandler(env = process.env, fetcher = fetch) {
       if (!configured) { json(res, 503, { configured: false, message: '관리자 로그인 연결을 준비 중입니다.' }); return; }
       if (action === 'login' && req.method === 'GET') {
         const state = random(), verifier = random();
-        res.setHeader('Set-Cookie', cookie(FLOW, await seal({ state, verifier }, 'flow', 600), 600));
+        const remember = new URL(req.url, origin).searchParams.get('remember') === '1';
+        res.setHeader('Set-Cookie', cookie(FLOW, await seal({ state, verifier, remember }, 'flow', 600), 600));
         const url = new URL('https://github.com/login/oauth/authorize');
         url.search = new URLSearchParams({ client_id: env.GITHUB_CLIENT_ID, redirect_uri: origin + '/api/editor?action=callback', state, code_challenge: createHash('sha256').update(verifier).digest('base64url'), code_challenge_method: 'S256', allow_signup: 'false' }).toString();
         redirect(res, url.href); return;
@@ -100,13 +135,16 @@ export function createEditorHandler(env = process.env, fetcher = fetch) {
         // GitHub App permissions and the user's repository permission must both permit writes.
         const repo = await github(`/repos/${REPO}`, auth.access_token);
         if (!repo.permissions?.push) { redirect(res, origin + '/admin.html?error=permission'); return; }
-        const age = Math.max(1, Math.min(7 * 3600, Number(auth.expires_in || 7 * 3600) - 60));
-        res.setHeader('Set-Cookie', [cookie(FLOW, '', 0), cookie(SESSION, await seal({ token: auth.access_token, login: user.login, userId: user.id, csrf: random() }, 'session', age), age)]);
+        const remember = !!(flow.remember && auth.refresh_token);
+        const age = remember ? Math.min(REMEMBER_AGE, Number(auth.refresh_token_expires_in || REMEMBER_AGE)) : Math.min(7 * 3600, Number(auth.expires_in || 7 * 3600) - 60);
+        await setSession(res, { token: auth.access_token, login: user.login, userId: user.id, csrf: random(), remember, until: now() + age, accessUntil: now() + Number(auth.expires_in || 28800), ...(remember ? { refreshToken: auth.refresh_token, refreshUntil: now() + Number(auth.refresh_token_expires_in || REMEMBER_AGE) } : {}) });
         redirect(res, origin + '/admin.html'); return;
       }
-      const session = await unseal(readCookie(req, SESSION), 'session');
+      let session = await unseal(readCookie(req, SESSION), 'session');
+      if (session?.userId === OWNER_ID && req.method !== 'GET' && (req.headers.origin !== origin || !equal(req.headers['x-csrf-token'], session.csrf))) throw error(403, '요청을 확인할 수 없습니다. 다시 로그인해 주세요.');
+      if (session?.userId === OWNER_ID && action !== 'logout') session = await refreshSession(session, res);
       if (action === 'session' && req.method === 'GET') {
-        json(res, 200, { configured: true, authenticated: session?.userId === OWNER_ID, ...(session?.userId === OWNER_ID ? { login: session.login, csrf: session.csrf } : {}) }); return;
+        json(res, 200, { configured: true, authenticated: session?.userId === OWNER_ID, ...(session?.userId === OWNER_ID ? { login: session.login, csrf: session.csrf, remembered: !!session.remember, expiresAt: session.until || session.exp } : {}) }); return;
       }
       if (!session || session.userId !== OWNER_ID) throw error(401, '먼저 관리자 로그인을 해 주세요.');
       if (req.method !== 'GET' && (req.headers.origin !== origin || !equal(req.headers['x-csrf-token'], session.csrf))) throw error(403, '요청을 확인할 수 없습니다. 다시 로그인해 주세요.');
