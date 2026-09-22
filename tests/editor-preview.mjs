@@ -13,6 +13,7 @@ if (process.argv.includes('--background')) {
 // Local, in-memory test server. No credentials and no remote write operations.
 const root = fileURLToPath(new URL('../', import.meta.url));
 let html = await readFile(resolve(root, 'index.html'), 'utf8');
+if (process.env.READING_FIXTURES === '1') html = replaceContent(html, 'works', (await import('./reading-fixtures.mjs')).readingFixtures);
 let authenticated = false;
 const hash = () => createHash('sha1').update(html).digest('hex');
 const types = { html: 'text/html; charset=utf-8', js: 'text/javascript', css: 'text/css', svg: 'image/svg+xml', png: 'image/png', webp: 'image/webp', jpg: 'image/jpeg', json: 'application/json' };
@@ -35,8 +36,8 @@ createServer(async (req, res) => {
       json(200, { sha: hash(), ...readContent(html) }); return;
     }
     const path = url.pathname === '/' ? '/index.html' : url.pathname;
-    if (!['/index.html', '/admin.html', '/editor-config.json', '/profile.jpg', '/field.png', '/apple-touch-icon.png'].includes(path) && !/^\/assets\/(?:editor|home-motion)\/[a-z0-9.-]+$/.test(path)) { res.writeHead(404).end(); return; }
+    if (!['/index.html', '/admin.html', '/editor-config.json', '/profile.jpg', '/field.png', '/apple-touch-icon.png'].includes(path) && !/^\/assets\/(?:editor|home-motion|reader)\/[a-z0-9.-]+$/.test(path)) { res.writeHead(404).end(); return; }
     const body = path === '/index.html' ? html : await readFile(resolve(root, '.' + path));
     res.writeHead(200, { 'Content-Type': types[path.split('.').at(-1)], 'Cache-Control': 'no-store' }); res.end(body);
   } catch (e) { json(e.status || 500, { message: e.message }); }
-}).listen(Number(process.env.PORT || 4319), '127.0.0.1', () => console.log('Local editor: http://127.0.0.1:4319/admin.html'));
+}).listen(Number(process.env.PORT || 4319), '127.0.0.1', () => console.log(`Local editor: http://127.0.0.1:${process.env.PORT || 4319}/admin.html`));
