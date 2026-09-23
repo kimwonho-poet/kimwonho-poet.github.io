@@ -19,15 +19,16 @@ test('all biography entries have unique stable internal destinations and keep or
     validateDetail(entry.detail);
   }
 });
-test('published archive omits poem transcriptions but retains linked originals and other documents', () => {
-  assert.ok(readContent(html).works.every(work => work.section !== 'poem'));
+test('published archive omits creative work transcriptions but retains links and other documents', () => {
+  assert.ok(readContent(html).works.every(work => work.section === 'research'));
   const documents = entries.flatMap(entry => entry.detail.documents);
-  assert.ok(documents.every(document => document.kind !== 'poem'));
-  for (const kind of ['review', 'speech', 'interview', 'play']) {
+  assert.ok(documents.every(document => !['poem', 'prose', 'play'].includes(document.kind)));
+  for (const kind of ['review', 'speech', 'interview']) {
     assert.ok(documents.some(document => document.kind === kind));
   }
   const linkedOriginals = [
     ['《동대문학상》', 'https://www.donggukmedia.com/bbs/view.html?idxno=9614&sc_category=1'],
+    ['《동대문학상》', 'https://www.donggukmedia.com/bbs/view.html?idxno=9618&sc_category=1'],
     ['《윤동주시문학상》', 'https://yoondongju.yonsei.ac.kr/yoondongju_m/notice/ydj_6_1.do?mode=download&articleNo=218372&attachNo=179126'],
     ['《가람이병기청년시문학상》', 'https://www.jbpresscenter.com/news/articleView.html?idxno=504929'],
     ['《펄벅기념문학상》', 'https://www.bcmuseum.or.kr/comm/file/down?id=3054'],
@@ -40,6 +41,9 @@ test('published archive omits poem transcriptions but retains linked originals a
     assert.ok(entry.detail.sources.some(source => source.url === url), title);
     assert.ok(renderActivityContents(entry).includes(url.replaceAll('&', '&amp;')), title);
   }
+  assert.deepEqual(entries.find(entry => entry.t === '《모닥》').detail.documents, []);
+  assert.deepEqual(entries.find(entry => entry.t === '《가글》 2호').detail.documents.map(document => document.kind), ['interview']);
+  assert.deepEqual(entries.find(entry => entry.t === '《동대문학상》').detail.documents.map(document => document.kind), ['review', 'review']);
 });
 test('detail metadata and source links round trip without touching works or profile', () => {
   const copy = structuredClone(about);
