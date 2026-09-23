@@ -19,6 +19,28 @@ test('all biography entries have unique stable internal destinations and keep or
     validateDetail(entry.detail);
   }
 });
+test('published archive omits poem transcriptions but retains linked originals and other documents', () => {
+  assert.ok(readContent(html).works.every(work => work.section !== 'poem'));
+  const documents = entries.flatMap(entry => entry.detail.documents);
+  assert.ok(documents.every(document => document.kind !== 'poem'));
+  for (const kind of ['review', 'speech', 'interview', 'play']) {
+    assert.ok(documents.some(document => document.kind === kind));
+  }
+  const linkedOriginals = [
+    ['《동대문학상》', 'https://www.donggukmedia.com/bbs/view.html?idxno=9614&sc_category=1'],
+    ['《윤동주시문학상》', 'https://yoondongju.yonsei.ac.kr/yoondongju_m/notice/ydj_6_1.do?mode=download&articleNo=218372&attachNo=179126'],
+    ['《가람이병기청년시문학상》', 'https://www.jbpresscenter.com/news/articleView.html?idxno=504929'],
+    ['《펄벅기념문학상》', 'https://www.bcmuseum.or.kr/comm/file/down?id=3054'],
+    ['《의혈창작문학상》', 'https://news.cauon.net/news/articleView.html?idxno=40158'],
+    ['《경남청년문학상》', 'https://kimwonho.tistory.com/21'],
+    ['《전주동네책방문학상》', 'https://m.blog.naver.com/jeonjubook/222615557100'],
+  ];
+  for (const [title, url] of linkedOriginals) {
+    const entry = entries.find(item => item.t === title);
+    assert.ok(entry.detail.sources.some(source => source.url === url), title);
+    assert.ok(renderActivityContents(entry).includes(url.replaceAll('&', '&amp;')), title);
+  }
+});
 test('detail metadata and source links round trip without touching works or profile', () => {
   const copy = structuredClone(about);
   copy.groups[0].items[0].detail = sample();
