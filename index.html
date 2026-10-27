@@ -404,7 +404,6 @@ nav.top{font-family:'DungGeunMo',var(--mono);font-size:15px;font-weight:700;lett
   <a class="mark" href="#/">KIM WONHO <span>/</span> POETRY</a>
   <nav class="top" aria-label="주요 메뉴">
     <a href="#/about" data-n="about">소개</a>
-    <a href="#/guest" data-n="guest">방문록</a>
   </nav>
 </header>
 
@@ -1424,7 +1423,7 @@ function renderHome(){
     const box = `--actor:${i}`;
     const badge = s.person ? `<span class="lv">${esc(SCENE.nameplate)}</span>` : "";
     const visual = `<span class="actor-shadow" aria-hidden="true"></span><span class="actor-body" aria-hidden="true"><span class="actor-sprite"></span></span>${badge}`;
-    if(s.key !== "about" && s.key !== "guest")
+    if(s.key !== "about")
       return `<span class="hs actor actor-${s.key}${s.person ? " person" : " rabbit"}" style="${box}" aria-hidden="true">${visual}</span>`;
     return `<a class="hs actor actor-${s.key}${s.person ? " person" : " rabbit"}" style="${box}" href="${esc(href)}" aria-label="${esc(s.label)}">${visual}<span class="tip">${esc(s.label)}</span></a>`;
   }).join("");
@@ -1619,8 +1618,6 @@ function route(){
     const entry = seg[1] && PortfolioActivities.activityEntries(ABOUT).find(it => it.id === seg[1]);
     html = entry ? renderActivity(entry, seg[2]) : renderAbout();
     ttl = `${entry ? entry.t : "소개"} — ${SITE.title}`; nav = "about";
-  } else if(seg[0] === "guest"){
-    html = renderGuest(); ttl = `방문록 — ${SITE.title}`; nav = "guest";
   } else {
     html = renderHome();
     home = true;
