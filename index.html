@@ -403,9 +403,6 @@ nav.top{font-family:'DungGeunMo',var(--mono);font-size:15px;font-weight:700;lett
 <header>
   <a class="mark" href="#/">KIM WONHO <span>/</span> POETRY</a>
   <nav class="top" aria-label="주요 메뉴">
-    <a href="#/poem" data-n="poem">시</a>
-    <a href="#/prose" data-n="prose">산문</a>
-    <a href="#/research" data-n="research">연구</a>
     <a href="#/about" data-n="about">소개</a>
     <a href="#/guest" data-n="guest">방문록</a>
   </nav>
@@ -1425,11 +1422,11 @@ function renderHome(){
       : s.href;
     if(!href) return "";
     const box = `--actor:${i}`;
-    const ext = s.key === "youtube";
     const badge = s.person ? `<span class="lv">${esc(SCENE.nameplate)}</span>` : "";
-    return `<a class="hs actor actor-${s.key}${s.person ? " person" : " rabbit"}" style="${box}" href="${esc(href)}"`
-      + (ext ? ` target="_blank" rel="noopener"` : "")
-      + ` aria-label="${esc(s.label)}"><span class="actor-shadow" aria-hidden="true"></span><span class="actor-body" aria-hidden="true"><span class="actor-sprite"></span></span>${badge}<span class="tip">${esc(s.label)}</span></a>`;
+    const visual = `<span class="actor-shadow" aria-hidden="true"></span><span class="actor-body" aria-hidden="true"><span class="actor-sprite"></span></span>${badge}`;
+    if(s.key !== "about" && s.key !== "guest")
+      return `<span class="hs actor actor-${s.key}${s.person ? " person" : " rabbit"}" style="${box}" aria-hidden="true">${visual}</span>`;
+    return `<a class="hs actor actor-${s.key}${s.person ? " person" : " rabbit"}" style="${box}" href="${esc(href)}" aria-label="${esc(s.label)}">${visual}<span class="tip">${esc(s.label)}</span></a>`;
   }).join("");
   const links = PROFILE.links.map(l =>
     `<a href="${esc(l.url)}" target="_blank" rel="noopener" aria-label="${esc(l.label)}">${ICONS[l.icon] || esc(l.label)}</a>`).join("");
@@ -1618,13 +1615,7 @@ function route(){
   window.readerView?.unmount();
   const seg = location.hash.replace(/^#\/?/, "").split("/");
   let html, ttl = SITE.title, nav = "", home = false;
-  if(seg[0] === "w" && seg[1]){
-    const w = WORKS.find(x => x.id === decodeURIComponent(seg[1]));
-    if(w){ html = renderWork(w); ttl = `${w.title} — ${SITE.title}`; nav = w.section; }
-    else { html = renderHome(); home = true; }
-  } else if(SEC[seg[0]]){
-    html = renderList(seg[0]); ttl = `${SEC[seg[0]].label} — ${SITE.title}`; nav = seg[0];
-  } else if(seg[0] === "about"){
+  if(seg[0] === "about"){
     const entry = seg[1] && PortfolioActivities.activityEntries(ABOUT).find(it => it.id === seg[1]);
     html = entry ? renderActivity(entry, seg[2]) : renderAbout();
     ttl = `${entry ? entry.t : "소개"} — ${SITE.title}`; nav = "about";
